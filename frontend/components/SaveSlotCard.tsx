@@ -2,7 +2,7 @@ import type { SaveSlot } from "@/lib/types"
 
 interface SaveSlotCardProps {
   slotNumber: number
-  save: SaveSlot
+  save: SaveSlot | null
   onSelect: (slotNumber: number) => void
   onDelete: (slotNumber: number) => void
 }
