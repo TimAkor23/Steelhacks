@@ -51,7 +51,7 @@ const mindsetModifiers = {
 const scenarios = [
   { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 200, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
   { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 400, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
-  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 50, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
+  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 150, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
   { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 60, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
 
@@ -136,8 +136,8 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   if (mindset === "risk") {
     const scenarioName = scenarios[scenarioIndex].name;
     const reducedRiskScenarios: Record<string, { debt?: number; bills?: number; investments?: number; stress?: number }> = {
-      "Business Owner": { debt: 0.8, bills: 1.0, investments: 1.4, stress: 1.1 },
-      "Blue Collar Worker": { debt: 0.5, bills: 0.95, investments: 1.1, stress: 0.9 },
+      "Business Owner": { debt: 0.9, bills: 1.0, investments: 1.3, stress: 1.1 },
+      "Blue Collar Worker": { debt: 0.8, bills: 0.95, investments: 1.1, stress: 0.95 },
     };
 
     const reduction = reducedRiskScenarios[scenarioName];
@@ -150,7 +150,7 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   }
 
   if (scenarios[scenarioIndex].name === "Blue Collar Worker") {
-    scenario.debt = 50;
+    scenario.debt = Math.max(150, scenario.debt);
   }
   scenario.stress = Math.min(100, Math.max(0, scenario.stress));
   const money = (value: number) => new Intl.NumberFormat("en-US", {
@@ -392,8 +392,8 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
         .stat span { display:block; font-size:11px; margin-bottom:3px; } .stat strong { font-size:18px; }
         .footer { display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:30px; }
         .back { padding:12px 16px; } .continue-wrap { margin-left:auto; text-align:right; }
-        .continue-wrap p { font-size:12px; margin:0 0 10px; }
-        .continue { color:#fff; background:#dc202b; box-shadow:0 5px 0 #8f1720; padding:16px 20px; }
+        .continue-wrap p { font-size:14px; font-weight:700; margin:0 0 10px; }
+        .continue { color:#fff; background:#dc202b; box-shadow:0 5px 0 #8f1720; padding:18px 24px; font-size:16px; }
         .continue-wrap .hint { margin-top:14px; }
         button:hover:not(:disabled) { background:#fff17b; } .continue:hover:not(:disabled) { background:#b81723; } button:active:not(:disabled) { transform:translateY(2px); box-shadow:none; }
         button:disabled { opacity:.55; cursor:not-allowed; }
@@ -434,8 +434,8 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
           .stat span { font-size:10px; line-height:1.3; overflow-wrap:break-word; }
           .stat strong { font-size:15px; }
           .footer { margin-top:16px; gap:12px; }
-          .continue-wrap p { font-size:11px; margin-bottom:6px; }
-          .continue { padding:10px 14px; font-size:9px; }
+          .continue-wrap p { font-size:12px; margin-bottom:6px; }
+          .continue { padding:12px 16px; font-size:12px; }
           .continue-wrap .hint { margin-top:8px; }
         }
         @media(max-width:760px) { .columns { grid-template-columns:1fr; } .setup { padding:24px 14px 36px; } .panel { padding:18px; } .footer { flex-direction:column; align-items:stretch; } .continue-wrap { margin:0; text-align:center; } .continue { width:100%; } }
