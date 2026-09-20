@@ -64,6 +64,7 @@ export interface SaveData {
   age: number
   currentYear: number
   netWorth: number
+  completed?: boolean
   game: GameState
 }
 
