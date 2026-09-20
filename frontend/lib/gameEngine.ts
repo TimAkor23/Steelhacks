@@ -4,6 +4,7 @@ import { scenarioTemplates } from "../data/scenarios"
 import type {
   ChoiceEffects,
   GameStats,
+  LifeBalance,
   LifeEvent,
   PlayStyle,
   StarterScenario,
@@ -22,11 +23,10 @@ export function formatCurrency(value: number) {
 }
 
 export function createStarterScenario(
-  playStyle: PlayStyle
+  playStyle: PlayStyle,
 ): StarterScenario {
   const randomIndex = Math.floor(Math.random() * scenarioTemplates.length)
   const base = scenarioTemplates[randomIndex]
-
   const scenario: StarterScenario = { ...base }
 
   if (playStyle === "saver") {
@@ -64,15 +64,26 @@ export function createStarterScenario(
   }
 }
 
-export function getRandomEvent(): LifeEvent {
-  const randomIndex = Math.floor(Math.random() * eventTemplates.length)
-  return eventTemplates[randomIndex]
+export function getRandomEvent(
+  excludedTitles: string[] = [],
+): LifeEvent {
+  const availableEvents = eventTemplates.filter(
+    (event) => !excludedTitles.includes(event.title),
+  )
+
+  const eventPool =
+    availableEvents.length > 0 ? availableEvents : eventTemplates
+
+  const randomIndex = Math.floor(Math.random() * eventPool.length)
+
+  return eventPool[randomIndex]
 }
 
 export function applyChoiceEffects(
   currentStats: GameStats,
+  currentBalance: LifeBalance,
   currentScore: number,
-  effects: ChoiceEffects
+  effects: ChoiceEffects,
 ) {
   const updatedStats: GameStats = {
     income: Math.max(0, currentStats.income + (effects.income ?? 0)),
@@ -82,18 +93,47 @@ export function applyChoiceEffects(
     savings: Math.max(0, currentStats.savings + (effects.savings ?? 0)),
     investments: Math.max(
       0,
-      currentStats.investments + (effects.investments ?? 0)
+      currentStats.investments + (effects.investments ?? 0),
     ),
-    cash: Math.max(0, currentStats.cash + (effects.cash ?? 0)),
+    cash: currentStats.cash + (effects.cash ?? 0),
     stress: clamp(
       currentStats.stress + (effects.stress ?? 0),
       0,
-      100
+      100,
     ),
   }
 
+  const updatedBalance: LifeBalance = {
+    health: clamp(
+    currentBalance.health +
+      (effects.health ?? Math.round(-(effects.stress ?? 0) * 0.35)),
+    0,
+    100,
+  ),
+
+  relationships: clamp(
+    currentBalance.relationships + (effects.relationships ?? 0),
+    0,
+    100,
+  ),
+
+  morale: clamp(
+    currentBalance.morale +
+      (effects.morale ?? Math.round((effects.score ?? 0) / 8)),
+    0,
+    100,
+  ),
+
+  smarts: clamp(
+    currentBalance.smarts + (effects.smarts ?? 0),
+    0,
+    100,
+  ),
+}
+
   return {
     stats: updatedStats,
+    balance: updatedBalance,
     score: Math.max(0, currentScore + (effects.score ?? 0)),
   }
 }
