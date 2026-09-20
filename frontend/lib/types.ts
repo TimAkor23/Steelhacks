@@ -11,21 +11,27 @@ export interface GameStats {
   stress: number
 }
 
+export interface LifeBalance {
+  health: number
+  relationships: number
+  morale: number
+  smarts: number
+}
 
-
-export interface ChoiceEffects extends Partial<GameStats> {
+export type ChoiceEffects = Partial<GameStats & LifeBalance> & {
   score?: number
 }
 
 export interface GameChoice {
   text: string
-  icon: string
+  icon?: string
   effects: ChoiceEffects
 }
 
 export interface LifeEvent {
   title: string
   description: string
+  icon?: string
   choices: GameChoice[]
 }
 
@@ -37,21 +43,19 @@ export interface LifeProfile {
   characterName: string
   startingAge: number
   occupation: string
-  annualSalary: number
-  relationshipStatus: "single" | "relationship" | "married"
-  children: number
-  cash: number
-  savings: number
-  debt: number
-  lifeGoal: string
+  playStyle: PlayStyle
 }
 
 export interface GameState {
   profile: LifeProfile
   stats: GameStats
+  balance: LifeBalance
   score: number
   currentYear: number
   maxYears: number
+  currentEvent: LifeEvent
+  recentEventTitles: string[]
+  history: string[]
 }
 
 export interface SaveData {
@@ -60,6 +64,7 @@ export interface SaveData {
   age: number
   currentYear: number
   netWorth: number
+  game: GameState
 }
 
 export type SaveSlot = SaveData | null
