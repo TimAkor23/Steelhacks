@@ -172,36 +172,56 @@ const eventTemplates = [
       { text: 'Borrow from your emergency fund', icon: '🧰', effects: { savings: -1100, stress: 8, score: 8 } },
       { text: 'Accept a late fee and payment plan', icon: '📅', effects: { cash: -300, debt: 900, stress: 13, score: 5 } }
     ]
+  },
+  {
+    title: 'Burnout warning',
+    description: 'Your body and mind are asking for a break, but taking time off could slow your financial progress.',
+    choices: [
+      { text: 'Take a real break and recover', icon: '🌿', effects: { income: -1800, cash: -500, health: 18, relationships: 8, purpose: 10, stress: -20, score: 12 } },
+      { text: 'Keep working and schedule a short weekend reset', icon: '⏱️', effects: { income: 2200, health: -10, relationships: -6, purpose: 2, stress: 14, score: 8 } },
+      { text: 'Ask for help and reduce your workload', icon: '🫶', effects: { income: -900, health: 10, relationships: 14, purpose: 8, stress: -12, score: 15 } }
+    ]
+  },
+  {
+    title: 'Friend in need',
+    description: 'A close friend needs support during a difficult month, and your choice will shape the relationship.',
+    choices: [
+      { text: 'Offer money you cannot easily spare', icon: '💛', effects: { cash: -900, savings: -400, health: -2, relationships: 18, purpose: 12, stress: 8, score: 10 } },
+      { text: 'Offer your time instead of money', icon: '🤝', effects: { health: -4, relationships: 12, purpose: 10, stress: 5, score: 13 } },
+      { text: 'Set a boundary and explain honestly', icon: '🗣️', effects: { relationships: -4, purpose: 8, stress: -4, score: 14 } }
+    ]
+  },
+  {
+    title: 'Career values test',
+    description: 'A higher-paying role conflicts with your values and leaves less time for the people you care about.',
+    choices: [
+      { text: 'Take the promotion and accept the pressure', icon: '🏆', effects: { income: 8500, health: -12, relationships: -10, purpose: -6, stress: 18, score: 12 } },
+      { text: 'Decline and protect your balance', icon: '⚖️', effects: { income: -1200, health: 10, relationships: 8, purpose: 16, stress: -10, score: 18 } },
+      { text: 'Negotiate a smaller raise with flexible hours', icon: '📝', effects: { income: 2800, health: 5, relationships: 5, purpose: 10, stress: 2, score: 20 } }
+    ]
+  },
+  {
+    title: 'Community commitment',
+    description: 'Your neighborhood needs help, but volunteering takes time and may reduce your available income.',
+    choices: [
+      { text: 'Volunteer regularly and give up paid hours', icon: '🌎', effects: { income: -1600, health: 6, relationships: 16, purpose: 20, stress: 2, score: 17 } },
+      { text: 'Make a small donation and keep working', icon: '🎁', effects: { cash: -450, relationships: 6, purpose: 10, score: 13 } },
+      { text: 'Focus on stabilizing your own household', icon: '🏠', effects: { health: 4, relationships: -3, purpose: 4, stress: -6, score: 11 } }
+    ]
+  },
+  {
+    title: 'Contract canceled',
+    description: 'Your main contract disappears without warning. Every response damages your earning power, and one bad choice can end the run.',
+    choices: [
+      { text: 'Pay for an emergency transition program', icon: '🧑‍💼', effects: { income: -50000, cash: -900, health: -8, purpose: 4, stress: 20, score: 4 } },
+      { text: 'Take a costly bridge loan while searching', icon: '💳', effects: { income: -36000, debt: 4800, cash: 900, relationships: -4, stress: 18, score: 3 } },
+      { text: 'Leave the field and start over elsewhere', icon: '🧭', effects: { income: -34000, cash: -500, health: 5, relationships: 4, purpose: 14, stress: 10, score: 9 } }
+    ]
   }
 ];
 
 const elements = {
   selectedAvatar: document.getElementById('selectedAvatar'),
-  selectedNameLabel: document.getElementById('selectedNameLabel'),
-  avatarPicker: document.getElementById('avatarPicker'),
-  playerName: document.getElementById('playerName'),
-  playStyle: document.getElementById('playStyle'),
-  randomizeButton: document.getElementById('randomizeButton'),
-  starterStats: document.getElementById('starterStats'),
-  startGameButton: document.getElementById('startGameButton'),
-  boardTrack: document.getElementById('boardTrack'),
-  tokenMarker: document.getElementById('tokenMarker'),
-  trackerText: document.getElementById('trackerText'),
-  eventTitle: document.getElementById('eventTitle'),
-  eventText: document.getElementById('eventText'),
-  choiceButtons: document.getElementById('choiceButtons'),
-  cashValue: document.getElementById('cashValue'),
-  debtValue: document.getElementById('debtValue'),
-  incomeValue: document.getElementById('incomeValue'),
-  savingsValue: document.getElementById('savingsValue'),
-  investmentValue: document.getElementById('investmentValue'),
-  stressValue: document.getElementById('stressValue'),
-  storyLog: document.getElementById('storyLog'),
-  worldBadge: document.getElementById('worldBadge'),
-  levelBadge: document.getElementById('levelBadge'),
-  turnLabel: document.getElementById('turnLabel'),
-  scoreBadge: document.getElementById('scoreBadge'),
-
   // live game elements
   liveGameView: document.getElementById('liveGameView'),
   liveScoreBadge: document.getElementById('liveScoreBadge'),
@@ -211,18 +231,21 @@ const elements = {
   liveDecisionModal: document.getElementById('liveDecisionModal'),
   jumpBtn: document.getElementById('jumpBtn'),
   collectBtn: document.getElementById('collectBtn'),
-  backToBoardBtn: document.getElementById('backToBoardBtn'),
   marioPlayer: document.getElementById('marioPlayer'),
   livePromptTitle: document.getElementById('livePromptTitle'),
   livePromptText: document.getElementById('livePromptText'),
-  livePromptChoices: document.getElementById('livePromptChoices')
+  livePromptChoices: document.getElementById('livePromptChoices'),
+  moralOverallValue: document.getElementById('moralOverallValue'),
+  moralOverallFill: document.getElementById('moralOverallFill'),
+  healthValue: document.getElementById('healthValue'),
+  healthFill: document.getElementById('healthFill'),
+  relationshipsValue: document.getElementById('relationshipsValue'),
+  relationshipsFill: document.getElementById('relationshipsFill'),
+  academicsValue: document.getElementById('academicsValue'),
+  academicsFill: document.getElementById('academicsFill')
 };
 
-// page nav elements
-const builderView = document.getElementById('builderView');
 const statsView = document.getElementById('statsView');
-const liveHud = document.getElementById('liveHud');
-const boardActions = document.getElementById('boardActions');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const finalTitle = document.getElementById('finalTitle');
 const finalSummaryEl = document.getElementById('finalSummary');
@@ -235,26 +258,6 @@ const confettiContainer = document.getElementById('confettiContainer');
 const eventIconEl = document.getElementById('eventIcon');
 const eventShortEl = document.getElementById('eventShort');
 const eventDetailEl = document.getElementById('eventText');
-
-// New page & profile elements
-const builderNav = document.getElementById('builderNav');
-const boardNav = document.getElementById('boardNav');
-const profileNav = document.getElementById('profileNav');
-const boardView = document.getElementById('boardView');
-const profileView = document.getElementById('profileView');
-const backToBoard = document.getElementById('backToBoard');
-const profileAvatar = document.getElementById('profileAvatar');
-const profileName = document.getElementById('profileName');
-const profileScore = document.getElementById('profileScore');
-const profileSummary = document.getElementById('profileSummary');
-
-// Stat fill elements on profile view
-const cashFill = document.getElementById('cashFill');
-const debtFill = document.getElementById('debtFill');
-const incomeFill = document.getElementById('incomeFill');
-const savingsFill = document.getElementById('savingsFill');
-const investmentsFill = document.getElementById('investmentsFill');
-const stressFill = document.getElementById('stressFill');
 
 const state = {
   avatar: avatarOptions[0],
@@ -288,7 +291,7 @@ function formatCurrency(value) {
 
 function createStarterScenario() {
   const base = scenarioTemplates[Math.floor(Math.random() * scenarioTemplates.length)];
-  const style = elements.playStyle.value;
+  const style = 'saver';
 
   let income = base.income;
   let bills = base.bills;
@@ -369,13 +372,7 @@ function renderAvatarPicker() {
 }
 
 function renderBoard() {
-  const activeIndex = Math.min(state.turn, boardSpaces.length - 1);
-
-  elements.boardTrack.innerHTML = boardSpaces
-    .map((space, index) => `<div class="track-space ${index === activeIndex ? 'active' : ''}">${space}</div>`)
-    .join('');
-
-  animateTokenToSpace(activeIndex);
+  return;
 }
 
 function animateTokenToSpace(index) {
@@ -389,61 +386,26 @@ function animateTokenToSpace(index) {
 
 function updateTrackerText() {
   if (!state.stats) return;
+  const trackerText = document.getElementById('liveMissionText');
+  if (!trackerText) return;
 
   if (state.stats.debt > 25000) {
-    elements.trackerText.textContent = 'Debt is holding your progress back. Attack it before it grows bigger.';
+    trackerText.textContent = 'Debt is holding your progress back. Attack it before it grows bigger.';
   } else if (state.stats.savings >= 10000) {
-    elements.trackerText.textContent = 'Your emergency cushion is strong. Keep growing your future wealth.';
+    trackerText.textContent = 'Your emergency cushion is strong. Keep growing your future wealth.';
   } else if (state.stats.income >= 70000) {
-    elements.trackerText.textContent = 'Your income is climbing. Keep building stability and smarter habits.';
+    trackerText.textContent = 'Your income is climbing. Keep building stability and smarter habits.';
   } else if (state.stats.stress >= 70) {
-    elements.trackerText.textContent = 'Stress is high. Protect your budget and focus on cash flow.';
+    trackerText.textContent = 'Stress is high. Protect your budget and focus on cash flow.';
   } else {
-    elements.trackerText.textContent = 'Build momentum by staying steady, saving early, and avoiding debt traps.';
+    trackerText.textContent = 'Build momentum by staying steady, saving early, and avoiding debt traps.';
   }
 }
 
 function updateHud() {
   if (!state.stats) return;
-
-  elements.cashValue.textContent = formatCurrency(state.stats.cash);
-  elements.debtValue.textContent = formatCurrency(state.stats.debt);
-  elements.incomeValue.textContent = formatCurrency(state.stats.income);
-  elements.savingsValue.textContent = formatCurrency(state.stats.savings);
-  elements.investmentValue.textContent = formatCurrency(state.stats.investments);
-  elements.stressValue.textContent = `${Math.round(state.stats.stress)}`;
-  elements.scoreBadge.textContent = `Score ${state.score}`;
-  elements.worldBadge.textContent = `World ${Math.min(1 + Math.floor(state.turn / 2), 4)}`;
-  elements.levelBadge.textContent = `Lv. ${Math.max(1, Math.floor(state.score / 80) + 1)}`;
-  elements.turnLabel.textContent = `Decision ${state.turn + 1}`;
   updateTrackerText();
-
-  // update visual meters on profile view if present
-  try {
-    const clampPct = (v) => Math.round(clamp(v, 0, 100));
-
-    // normalize against simple targets
-    const cashPct = clampPct((state.stats.cash / 20000) * 100);
-    const debtPct = clampPct(100 - (state.stats.debt / 50000) * 100);
-    const incomePct = clampPct((state.stats.income / 100000) * 100);
-    const savingsPct = clampPct((state.stats.savings / 50000) * 100);
-    const investmentsPct = clampPct((state.stats.investments / 200000) * 100);
-    const stressPct = clampPct((state.stats.stress / 100) * 100);
-
-    if (cashFill) cashFill.style.width = `${cashPct}%`;
-    if (debtFill) debtFill.style.width = `${debtPct}%`;
-    if (incomeFill) incomeFill.style.width = `${incomePct}%`;
-    if (savingsFill) savingsFill.style.width = `${savingsPct}%`;
-    if (investmentsFill) investmentsFill.style.width = `${investmentsPct}%`;
-    if (stressFill) stressFill.style.width = `${stressPct}%`;
-
-    if (profileScore) profileScore.textContent = `Score ${state.score}`;
-    if (profileName) profileName.textContent = elements.playerName.value || 'Future Builder';
-    if (profileAvatar) profileAvatar.textContent = state.avatar;
-    if (profileSummary) profileSummary.textContent = `Cash ${formatCurrency(state.stats.cash)}, Debt ${formatCurrency(state.stats.debt)}, Net ${formatCurrency(state.stats.savings + state.stats.investments - state.stats.debt)}.`;
-  } catch (e) {
-    // ignore when profile view not mounted
-  }
+  updateLiveGameHud();
 }
 
 // previous stats for diff-based animations
@@ -462,13 +424,15 @@ function animateStatChange(key, delta) {
 }
 
 function appendStory(message) {
+  const storyLog = document.getElementById('storyLog');
+  if (!storyLog) return;
   const entry = document.createElement('div');
   entry.className = 'story-entry';
   entry.textContent = message;
-  elements.storyLog.prepend(entry);
+  storyLog.prepend(entry);
 
-  while (elements.storyLog.children.length > 6) {
-    elements.storyLog.removeChild(elements.storyLog.lastChild);
+  while (storyLog.children.length > 6) {
+    storyLog.removeChild(storyLog.lastChild);
   }
 }
 
@@ -514,11 +478,27 @@ function applyChoiceEffects(effects) {
     // apply
     if (k === 'debt') {
       state.stats.debt = Math.max(0, before + change);
-    } else if (k === 'savings' || k === 'investments' || k === 'cash' || k === 'income') {
+    } else if (k === 'savings' || k === 'investments') {
       state.stats[k] = Math.max(0, before + change);
+    } else if (k === 'cash') {
+      state.stats.cash = before + change;
+    } else if (k === 'income') {
+      state.stats.income = before + change;
     } else if (k === 'stress') {
       state.stats.stress = clamp(before + change, 0, 100);
     }
+  });
+
+  const moralEffects = {
+    health: effects.health ?? Math.round(-(effects.stress ?? 0) * 0.35 + ((effects.cash ?? 0) < 0 ? -1 : (effects.cash ?? 0) > 0 ? 1 : 0)),
+    relationships: effects.relationships ?? ((effects.cash ?? 0) < 0 && (effects.stress ?? 0) > 0 ? -2 : (effects.cash ?? 0) > 0 ? 1 : 0),
+    purpose: effects.purpose ?? Math.round((effects.score ?? 0) / 8 - ((effects.debt ?? 0) > 0 ? 2 : 0))
+  };
+
+  Object.entries(moralEffects).forEach(([key, change]) => {
+    const before = state.stats[key] ?? 0;
+    state.stats[key] = clamp(before + change, 0, 100);
+    if (change !== 0) animateStatChange(key, change);
   });
 
   const scoreBefore = state.score;
@@ -550,6 +530,14 @@ function applyChoiceEffects(effects) {
   }
 
   updateHud();
+}
+
+function hasNegativeIncome() {
+  return state.stats && state.stats.income < 0;
+}
+
+function hasNegativeCash() {
+  return state.stats && state.stats.cash < 0;
 }
 
 function getRandomEvent() {
@@ -593,7 +581,12 @@ function renderLivePrompt(event, options = []) {
       if (typeof choice.effects === 'object') {
         applyChoiceEffects(choice.effects);
       }
-      appendStory(`${elements.playerName.value || 'Future Builder'} chose: ${choice.text}`);
+      appendStory(`Future Builder chose: ${choice.text}`);
+      if (hasNegativeIncome() || hasNegativeCash()) {
+        const outcome = hasNegativeCash() ? 'cash-loss' : 'income-loss';
+        setTimeout(() => finishGame(outcome), 420);
+        return;
+      }
       state.turn += 1;
       livePathStep = clamp(livePathStep + getChoiceMovement(choice.effects), 0, state.maxTurns);
       updateLiveGameHud();
@@ -611,92 +604,12 @@ function renderEvent() {
   const event = getRandomEvent();
   state.currentEvent = event;
 
-  elements.eventTitle.textContent = event.title;
   if (eventIconEl) eventIconEl.textContent = event.icon || '🎲';
   if (eventShortEl) eventShortEl.textContent = event.description.slice(0, 64) + (event.description.length > 64 ? '…' : '');
   if (eventDetailEl) eventDetailEl.textContent = event.description;
 
   renderLivePrompt(event, event.choices);
 
-  if (boardActions) {
-    boardActions.innerHTML = '';
-    const title = document.createElement('div');
-    title.className = 'action-title';
-    title.textContent = event.title;
-    const desc = document.createElement('div');
-    desc.className = 'action-desc';
-    desc.textContent = event.description;
-    const choicesWrap = document.createElement('div');
-    choicesWrap.className = 'action-choices';
-
-    event.choices.forEach((choice, idx) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'choice-btn';
-      btn.textContent = choice.icon ? choice.icon + ' ' + choice.text : choice.text;
-      btn.addEventListener('click', () => {
-        applyChoiceEffects(choice.effects);
-        appendStory(`${elements.playerName.value || 'Future Builder'} chose: ${choice.text}`);
-        state.turn += 1;
-        renderBoard();
-        boardActions.innerHTML = '';
-
-        if (hasReachedFinishLine()) {
-          setTimeout(() => finishGame(), 420);
-          return;
-        }
-
-        setTimeout(() => renderEvent(), 420);
-      });
-      choicesWrap.appendChild(btn);
-    });
-
-    boardActions.appendChild(title);
-    boardActions.appendChild(desc);
-    boardActions.appendChild(choicesWrap);
-    boardActions.classList.remove('hidden');
-  }
-
-  const infoBtn = document.getElementById('eventInfoBtn');
-  if (infoBtn) infoBtn.style.display = 'none';
-}
-
-function showLiveGameView() {
-  if (elements.liveGameView) elements.liveGameView.classList.remove('hidden');
-  if (builderView) builderView.classList.add('hidden');
-  if (boardView) boardView.classList.add('hidden');
-  if (profileView) profileView.classList.add('hidden');
-  if (statsView) statsView.classList.add('hidden');
-}
-
-function showBuilderView() {
-  if (builderView) builderView.classList.remove('hidden');
-  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
-  if (boardView) boardView.classList.add('hidden');
-  if (profileView) profileView.classList.add('hidden');
-  if (statsView) statsView.classList.add('hidden');
-}
-
-function showBoardView() {
-  if (boardView) boardView.classList.remove('hidden');
-  if (builderView) builderView.classList.add('hidden');
-  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
-  if (profileView) profileView.classList.add('hidden');
-  if (statsView) statsView.classList.add('hidden');
-  updateHud();
-}
-
-function showProfileView() {
-  if (profileView) profileView.classList.remove('hidden');
-  if (builderView) builderView.classList.add('hidden');
-  if (boardView) boardView.classList.add('hidden');
-  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
-  if (statsView) statsView.classList.add('hidden');
-  updateHud();
-}
-
-function syncPlayerIdentity() {
-  elements.selectedNameLabel.textContent = elements.playerName.value || 'Future Builder';
 }
 
 function startGame() {
@@ -711,12 +624,13 @@ function startGame() {
     income: scenario.income,
     savings: scenario.savings,
     investments: scenario.investments,
-    stress: scenario.stress
+    stress: scenario.stress,
+    health: 72,
+    relationships: 68,
+    purpose: 65
   };
 
-  elements.selectedNameLabel.textContent = elements.playerName.value || 'Future Builder';
-  elements.storyLog.innerHTML = '';
-  appendStory(`${elements.playerName.value || 'Future Builder'} started a new life game with ${scenario.label.toLowerCase()}.`);
+  appendStory(`Future Builder started a new life game with ${scenario.label.toLowerCase()}.`);
   appendStory('Goal: build a safer financial future and avoid money traps.');
 
   // Reset live game state
@@ -725,11 +639,7 @@ function startGame() {
   liveProgress = 0;
   livePathStep = 0;
 
-  // Hide other views and show live game
-  if (builderView) builderView.classList.add('hidden');
   if (statsView) statsView.classList.add('hidden');
-  if (profileView) profileView.classList.add('hidden');
-  if (boardView) boardView.classList.add('hidden');
   if (elements.liveGameView) elements.liveGameView.classList.remove('hidden');
 
   // Initialize live game displays
@@ -738,9 +648,13 @@ function startGame() {
   renderEvent();
 }
 
-function finishGame() {
+function finishGame(outcome = 'complete') {
   const summary = state.stats.savings + state.stats.investments - state.stats.debt;
-  const finishText = summary >= 50000
+  const finishText = outcome === 'cash-loss'
+    ? 'Your cash balance fell below zero, so the run ends here. Protect your cash flow and try again.'
+    : outcome === 'income-loss'
+    ? 'Your income fell below zero, so the run ends here. Rebuild your income foundation and try again.'
+    : summary >= 50000
     ? 'You finished with a strong cushion and a healthier future. Your money habits are setting you up for long-term success.'
     : summary >= 0
       ? 'You finished with some stability, but there is still room to grow your savings and reduce stress.'
@@ -751,15 +665,41 @@ function finishGame() {
   launchConfetti(25);
   showToast('Journey complete!', 3000);
 
-  if (finalTitle) finalTitle.textContent = 'Adventure complete!';
+  if (finalTitle) finalTitle.textContent = outcome === 'cash-loss'
+    ? 'Game over: cash ran out'
+    : outcome === 'income-loss'
+      ? 'Game over: income collapsed'
+      : 'Adventure complete!';
   if (finalSummaryEl) finalSummaryEl.textContent = `${finishText} Final net worth: ${formatCurrency(summary)}.`;
   try {
     const pct = clamp(Math.round((summary / 100000) * 100), 0, 100);
     if (finalNetFill) finalNetFill.style.width = `${pct}%`;
-    if (finalDetails) finalDetails.textContent = `Cash ${formatCurrency(state.stats.cash)}, Debt ${formatCurrency(state.stats.debt)}, Savings ${formatCurrency(state.stats.savings)}, Investments ${formatCurrency(state.stats.investments)}.`;
+    if (finalDetails) {
+      const moral = ['health', 'relationships', 'purpose'].map((key) => Math.round(state.stats[key]));
+      const overall = Math.round(moral.reduce((total, value) => total + value, 0) / moral.length);
+      const details = [
+        ['Cash', formatCurrency(state.stats.cash)],
+        ['Income', formatCurrency(state.stats.income)],
+        ['Debt', formatCurrency(state.stats.debt)],
+        ['Savings', formatCurrency(state.stats.savings)],
+        ['Investments', formatCurrency(state.stats.investments)],
+        ['Life balance', `${overall}%`],
+        ['Health', `${moral[0]}%`],
+        ['Relationships', `${moral[1]}%`],
+        ['Academics', `${moral[2]}%`]
+      ];
+      finalDetails.innerHTML = details
+        .map(([label, value]) => `<div class="summary-stat-card"><span>${label}</span><strong>${value}</strong></div>`)
+        .join('');
+    }
   } catch (e) {}
 
-  if (elements.trackerText) elements.trackerText.textContent = 'Your story is complete. Replay to try a different money strategy.';
+  if (profileScore) profileScore.textContent = `Score ${state.score}`;
+  if (profileSummary) profileSummary.textContent = `Final net worth ${formatCurrency(summary)}. Life balance ${Math.round((state.stats.health + state.stats.relationships + state.stats.purpose) / 3)}%.`;
+
+  if (elements.trackerText) elements.trackerText.textContent = outcome === 'income-loss'
+    ? 'Income dropped below zero. Replay and protect your earning power.'
+    : 'Your story is complete. Replay to try a different money strategy.';
   if (elements.turnLabel) elements.turnLabel.textContent = 'Final turn';
   if (elements.scoreBadge) elements.scoreBadge.textContent = `Final ${state.score}`;
 }
@@ -781,6 +721,21 @@ function updateLiveMiniStats() {
   if (miniMap.savings) miniMap.savings.textContent = formatCurrency(state.stats.savings);
   if (miniMap.invest) miniMap.invest.textContent = formatCurrency(state.stats.investments);
   if (miniMap.stress) miniMap.stress.textContent = String(Math.round(state.stats.stress));
+
+  const moral = ['health', 'relationships', 'purpose'].map((key) => clamp(state.stats[key] ?? 0, 0, 100));
+  const overall = Math.round(moral.reduce((total, value) => total + value, 0) / moral.length);
+  const moralRows = [
+    ['health', elements.healthValue, elements.healthFill],
+    ['relationships', elements.relationshipsValue, elements.relationshipsFill],
+    ['purpose', elements.academicsValue, elements.academicsFill]
+  ];
+  moralRows.forEach(([key, valueEl, fillEl]) => {
+    const value = Math.round(clamp(state.stats[key] ?? 0, 0, 100));
+    if (valueEl) valueEl.textContent = String(value);
+    if (fillEl) fillEl.style.width = `${value}%`;
+  });
+  if (elements.moralOverallValue) elements.moralOverallValue.textContent = String(overall);
+  if (elements.moralOverallFill) elements.moralOverallFill.style.width = `${overall}%`;
 }
 
 function updateLiveGameHud() {
@@ -802,44 +757,10 @@ function getChoiceMovement(effects = {}) {
   return costsMoney || addsDebt ? -1 : 1;
 }
 
-if (elements.backToBoardBtn) elements.backToBoardBtn.addEventListener('click', showBoardView);
-
-// Navigation buttons
-if (builderNav) builderNav.addEventListener('click', showBuilderView);
-if (boardNav) boardNav.addEventListener('click', showBoardView);
-if (profileNav) profileNav.addEventListener('click', showProfileView);
-
-// Find and wire up liveGameNav
-const liveGameNav = document.getElementById('liveGameNav');
-if (liveGameNav) liveGameNav.addEventListener('click', showLiveGameView);
-
-// Builder and game start buttons
-elements.randomizeButton.addEventListener('click', () => {
-  state.currentScenario = null;
-  renderStarterStats();
-  appendStory('A new starter scenario was loaded.');
-});
-
-elements.startGameButton.addEventListener('click', () => {
-  startGame();
-});
-
-// Avatar picker events
-elements.playerName.addEventListener('input', syncPlayerIdentity);
-elements.playStyle.addEventListener('change', () => {
-  renderStarterStats();
-});
-
 // Play again
 if (playAgainBtn) playAgainBtn.addEventListener('click', () => {
   startGame();
 });
 
-// Initialize page on load
-renderAvatarPicker();
-renderStarterStats();
-updateHud();
-renderBoard();
-renderEvent();
-showBuilderView();
+startGame();
 
