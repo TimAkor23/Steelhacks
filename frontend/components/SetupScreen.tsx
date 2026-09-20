@@ -49,10 +49,10 @@ const mindsetModifiers = {
 // Fictional monthly take-home income and personal expenses; balances are one-time amounts.
 // Taxes are already included in take-home income. Keep taxes: 0 for the existing payload.
 const scenarios = [
-  { name: "Single Parent", description: "You’re raising a child on one income. Balance childcare, everyday bills, and unexpected expenses.", income: 3600, bills: 3200, taxes: 0, debt: 4000, savings: 800, emergencyFund: 600, investments: 500, cash: 500, stress: 40 },
-  { name: "Scholarship Student", description: "Your tuition is covered, but you still need to budget for books, food, and transportation.", income: 1200, bills: 1000, taxes: 0, debt: 500, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
-  { name: "Small Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 8000, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 40 },
-  { name: "The First Paycheck", description: "You’ve landed your first full-time job. Build a budget and start working toward your goals.", income: 3200, bills: 2400, taxes: 0, debt: 2000, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
+  { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 9000, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
+  { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 8000, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
+  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 1500, savings: 800, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
+  { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 6000, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
 
 export type CharacterSetup = {
@@ -116,7 +116,7 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   const [name, setName] = useState("");
   const [clothes, setClothes] = useState({ top: 0, bottom: 0, shoes: 0 });
   const [mindset, setMindset] = useState<Mindset>("saver");
-  const [scenarioIndex, setScenarioIndex] = useState(1);
+  const [scenarioIndex, setScenarioIndex] = useState(0);
   const [error, setError] = useState("");
   const top = outfits.top[clothes.top];
   const bottom = outfits.bottom[clothes.bottom];
