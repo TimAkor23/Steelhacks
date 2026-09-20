@@ -82,6 +82,96 @@ const eventTemplates = [
       { text: 'Use the bonus to pay off debt fast', icon: '🏦', effects: { debt: -2700, cash: 1400, score: 20 } },
       { text: 'Save it as a buffer for emergencies', icon: '🧰', effects: { savings: 2600, score: 18 } }
     ]
+  },
+  {
+    title: 'Medical expense',
+    description: 'An unexpected medical bill arrives while your budget is already stretched.',
+    choices: [
+      { text: 'Pay the bill from savings', icon: '🏥', effects: { savings: -3200, cash: -500, stress: 10, score: 5 } },
+      { text: 'Use a payment plan and protect your savings', icon: '🧾', effects: { debt: 2800, stress: 8, score: 8 } },
+      { text: 'Delay care and keep the cash for now', icon: '⏳', effects: { cash: 300, stress: 20, score: 1 } }
+    ]
+  },
+  {
+    title: 'Predatory loan offer',
+    description: 'A lender promises quick cash, but the interest could follow you for years.',
+    choices: [
+      { text: 'Take the loan to solve today\'s problem', icon: '💳', effects: { cash: 4200, debt: 6500, stress: 14, score: 2 } },
+      { text: 'Sell investments and avoid new debt', icon: '📉', effects: { investments: -2600, cash: 2300, stress: 6, score: 10 } },
+      { text: 'Cut spending and wait it out', icon: '✂️', effects: { cash: -900, stress: 12, score: 14 } }
+    ]
+  },
+  {
+    title: 'Job uncertainty',
+    description: 'Your employer announces layoffs and asks you to choose how to respond.',
+    choices: [
+      { text: 'Pay for training to become harder to replace', icon: '📚', effects: { cash: -1200, investments: 1800, income: 5500, stress: 8, score: 18 } },
+      { text: 'Build a three-month emergency reserve', icon: '🛡️', effects: { savings: 1800, cash: -700, stress: -4, score: 16 } },
+      { text: 'Take overtime and burn out for extra pay', icon: '⚡', effects: { income: 7000, cash: 900, stress: 22, score: 8 } }
+    ]
+  },
+  {
+    title: 'Insurance renewal',
+    description: 'Your insurance premium jumps, forcing a choice between protection and monthly cash flow.',
+    choices: [
+      { text: 'Keep full coverage and pay the higher bill', icon: '🛡️', effects: { cash: -600, savings: -400, stress: 3, score: 12 } },
+      { text: 'Raise the deductible and save monthly cash', icon: '⚖️', effects: { savings: 700, stress: 8, score: 14 } },
+      { text: 'Cancel coverage and take the risk', icon: '🎲', effects: { cash: 900, stress: 18, score: 3 } }
+    ]
+  },
+  {
+    title: 'Family request',
+    description: 'Someone close to you needs help, but giving too much could derail your own plan.',
+    choices: [
+      { text: 'Send a large transfer immediately', icon: '🤲', effects: { cash: -2200, savings: -1200, stress: 16, score: 5 } },
+      { text: 'Give a smaller amount with a clear limit', icon: '🤝', effects: { cash: -700, stress: 8, score: 12 } },
+      { text: 'Decline and protect your emergency fund', icon: '🚫', effects: { stress: -4, score: 15 } }
+    ]
+  },
+  {
+    title: 'Investment warning',
+    description: 'A market drop threatens your investments just as a major bill is due.',
+    choices: [
+      { text: 'Sell investments before the drop gets worse', icon: '📉', effects: { investments: -1800, cash: 1300, stress: 6, score: 9 } },
+      { text: 'Hold steady and protect your long-term plan', icon: '📈', effects: { stress: 14, score: 18 } },
+      { text: 'Borrow money to buy more at the low price', icon: '🎯', effects: { debt: 3000, investments: 4200, stress: 20, score: 10 } }
+    ]
+  },
+  {
+    title: 'Housing decision',
+    description: 'You can lock in a new home, but the move changes your debt and monthly cash flow.',
+    choices: [
+      { text: 'Sign the lease and pay moving costs', icon: '🏠', effects: { cash: -1800, savings: -800, stress: 12, score: 8 } },
+      { text: 'Share a place and accelerate savings', icon: '👥', effects: { savings: 1700, stress: 5, score: 17 } },
+      { text: 'Stay put and negotiate with the landlord', icon: '📞', effects: { cash: -300, savings: 400, stress: 8, score: 13 } }
+    ]
+  },
+  {
+    title: 'Emergency car failure',
+    description: 'Your car fails before an important week. Every option costs money, but one protects your future cash flow better.',
+    choices: [
+      { text: 'Pay for the full repair today', icon: '🔧', effects: { cash: -1400, savings: -900, stress: 10, score: 8 } },
+      { text: 'Use a mechanic payment plan', icon: '🧾', effects: { cash: -350, debt: 1900, stress: 14, score: 6 } },
+      { text: 'Replace it with a reliable used car', icon: '🚙', effects: { cash: -900, debt: 3600, stress: 8, score: 10 } }
+    ]
+  },
+  {
+    title: 'Tax deadline',
+    description: 'A tax balance is due now. You must pay, borrow, or liquidate part of your plan to stay current.',
+    choices: [
+      { text: 'Pay the balance from savings', icon: '🏦', effects: { savings: -2400, cash: -500, stress: 8, score: 12 } },
+      { text: 'Put the balance on a payment plan', icon: '💳', effects: { cash: -250, debt: 3000, stress: 12, score: 7 } },
+      { text: 'Sell investments to cover the bill', icon: '📉', effects: { investments: -2100, cash: -300, stress: 6, score: 10 } }
+    ]
+  },
+  {
+    title: 'Utility shutoff warning',
+    description: 'A past-due utility bill must be handled before service is interrupted. Every option reduces your resources.',
+    choices: [
+      { text: 'Pay the full balance immediately', icon: '💡', effects: { cash: -850, stress: 6, score: 9 } },
+      { text: 'Borrow from your emergency fund', icon: '🧰', effects: { savings: -1100, stress: 8, score: 8 } },
+      { text: 'Accept a late fee and payment plan', icon: '📅', effects: { cash: -300, debt: 900, stress: 13, score: 5 } }
+    ]
   }
 ];
 
@@ -118,6 +208,7 @@ const elements = {
   liveCashCount: document.getElementById('liveCashCount'),
   liveMissionText: document.getElementById('liveMissionText'),
   liveProgressFill: document.getElementById('liveProgressFill'),
+  liveDecisionModal: document.getElementById('liveDecisionModal'),
   jumpBtn: document.getElementById('jumpBtn'),
   collectBtn: document.getElementById('collectBtn'),
   backToBoardBtn: document.getElementById('backToBoardBtn'),
@@ -173,12 +264,15 @@ const state = {
   stats: null,
   currentEvent: null,
   started: false,
-  currentScenario: null
+  currentScenario: null,
+  isAwaitingDecision: false,
+  recentEvents: []
 };
 
 let liveCash = 0;
 let liveProgress = 0;
 let liveX = 80;
+let livePathStep = 0;
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -321,7 +415,7 @@ function updateHud() {
   elements.scoreBadge.textContent = `Score ${state.score}`;
   elements.worldBadge.textContent = `World ${Math.min(1 + Math.floor(state.turn / 2), 4)}`;
   elements.levelBadge.textContent = `Lv. ${Math.max(1, Math.floor(state.score / 80) + 1)}`;
-  elements.turnLabel.textContent = `Turn ${Math.min(state.turn + 1, state.maxTurns)}`;
+  elements.turnLabel.textContent = `Decision ${state.turn + 1}`;
   updateTrackerText();
 
   // update visual meters on profile view if present
@@ -378,6 +472,37 @@ function appendStory(message) {
   }
 }
 
+function showToast(message, duration = 2200) {
+  if (!toastContainer) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+  setTimeout(() => toast.remove(), duration);
+}
+
+function triggerShake(target) {
+  if (!target) return;
+  target.classList.remove('shake');
+  void target.offsetWidth;
+  target.classList.add('shake');
+  setTimeout(() => target.classList.remove('shake'), 560);
+}
+
+function launchConfetti(count = 18) {
+  if (!confettiContainer) return;
+  const colors = ['#ff6b6b', '#ffd166', '#4ecdc4', '#5b8def'];
+  for (let index = 0; index < count; index += 1) {
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.background = colors[index % colors.length];
+    piece.style.animationDelay = `${Math.random() * 180}ms`;
+    confettiContainer.appendChild(piece);
+    setTimeout(() => piece.remove(), 1500);
+  }
+}
+
 function applyChoiceEffects(effects) {
   // apply diffs and animate stat changes
   const keys = ['cash', 'debt', 'income', 'savings', 'investments', 'stress'];
@@ -428,8 +553,15 @@ function applyChoiceEffects(effects) {
 }
 
 function getRandomEvent() {
-  const available = eventTemplates.slice();
-  return available[Math.floor(Math.random() * available.length)];
+  const available = eventTemplates.filter((event) => !state.recentEvents.includes(event.title));
+  const pool = available.length ? available : eventTemplates;
+  const event = pool[Math.floor(Math.random() * pool.length)];
+  state.recentEvents = [...state.recentEvents, event.title].slice(-3);
+  return event;
+}
+
+function hasReachedFinishLine() {
+  return livePathStep >= state.maxTurns;
 }
 
 function renderLivePrompt(event, options = []) {
@@ -443,6 +575,9 @@ function renderLivePrompt(event, options = []) {
   }
   if (!elements.livePromptChoices) return;
 
+  // Freeze player movement until a decision is made
+  state.isAwaitingDecision = true;
+  if (elements.liveDecisionModal) elements.liveDecisionModal.classList.add('is-visible');
   elements.livePromptChoices.innerHTML = '';
   const choices = options.length ? options : (event.choices || []);
 
@@ -452,13 +587,17 @@ function renderLivePrompt(event, options = []) {
     btn.className = 'live-choice-btn';
     btn.textContent = `${choice.icon || '🎯'} ${choice.text}`;
     btn.addEventListener('click', () => {
+      // Allow player to move again after making a decision
+      state.isAwaitingDecision = false;
+      if (elements.liveDecisionModal) elements.liveDecisionModal.classList.remove('is-visible');
       if (typeof choice.effects === 'object') {
         applyChoiceEffects(choice.effects);
       }
       appendStory(`${elements.playerName.value || 'Future Builder'} chose: ${choice.text}`);
       state.turn += 1;
-      renderBoard();
-      if (state.turn >= state.maxTurns) {
+      livePathStep = clamp(livePathStep + getChoiceMovement(choice.effects), 0, state.maxTurns);
+      updateLiveGameHud();
+      if (hasReachedFinishLine()) {
         setTimeout(() => finishGame(), 420);
         return;
       }
@@ -502,7 +641,7 @@ function renderEvent() {
         renderBoard();
         boardActions.innerHTML = '';
 
-        if (state.turn >= state.maxTurns) {
+        if (hasReachedFinishLine()) {
           setTimeout(() => finishGame(), 420);
           return;
         }
@@ -530,6 +669,101 @@ function showLiveGameView() {
   if (statsView) statsView.classList.add('hidden');
 }
 
+function showBuilderView() {
+  if (builderView) builderView.classList.remove('hidden');
+  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
+  if (boardView) boardView.classList.add('hidden');
+  if (profileView) profileView.classList.add('hidden');
+  if (statsView) statsView.classList.add('hidden');
+}
+
+function showBoardView() {
+  if (boardView) boardView.classList.remove('hidden');
+  if (builderView) builderView.classList.add('hidden');
+  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
+  if (profileView) profileView.classList.add('hidden');
+  if (statsView) statsView.classList.add('hidden');
+  updateHud();
+}
+
+function showProfileView() {
+  if (profileView) profileView.classList.remove('hidden');
+  if (builderView) builderView.classList.add('hidden');
+  if (boardView) boardView.classList.add('hidden');
+  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
+  if (statsView) statsView.classList.add('hidden');
+  updateHud();
+}
+
+function syncPlayerIdentity() {
+  elements.selectedNameLabel.textContent = elements.playerName.value || 'Future Builder';
+}
+
+function startGame() {
+  const scenario = state.currentScenario || createStarterScenario();
+  state.started = true;
+  state.turn = 0;
+  state.score = 0;
+  state.recentEvents = [];
+  state.stats = {
+    cash: scenario.cash,
+    debt: scenario.debt,
+    income: scenario.income,
+    savings: scenario.savings,
+    investments: scenario.investments,
+    stress: scenario.stress
+  };
+
+  elements.selectedNameLabel.textContent = elements.playerName.value || 'Future Builder';
+  elements.storyLog.innerHTML = '';
+  appendStory(`${elements.playerName.value || 'Future Builder'} started a new life game with ${scenario.label.toLowerCase()}.`);
+  appendStory('Goal: build a safer financial future and avoid money traps.');
+
+  // Reset live game state
+  liveX = 80;
+  liveCash = 0;
+  liveProgress = 0;
+  livePathStep = 0;
+
+  // Hide other views and show live game
+  if (builderView) builderView.classList.add('hidden');
+  if (statsView) statsView.classList.add('hidden');
+  if (profileView) profileView.classList.add('hidden');
+  if (boardView) boardView.classList.add('hidden');
+  if (elements.liveGameView) elements.liveGameView.classList.remove('hidden');
+
+  // Initialize live game displays
+  updateHud();
+  updateLiveGameHud();
+  renderEvent();
+}
+
+function finishGame() {
+  const summary = state.stats.savings + state.stats.investments - state.stats.debt;
+  const finishText = summary >= 50000
+    ? 'You finished with a strong cushion and a healthier future. Your money habits are setting you up for long-term success.'
+    : summary >= 0
+      ? 'You finished with some stability, but there is still room to grow your savings and reduce stress.'
+      : 'This run was tough, but every challenge taught you something valuable about protecting cash flow and controlling debt.';
+      
+  if (elements.liveGameView) elements.liveGameView.classList.add('hidden');
+  if (statsView) statsView.classList.remove('hidden');
+  launchConfetti(25);
+  showToast('Journey complete!', 3000);
+
+  if (finalTitle) finalTitle.textContent = 'Adventure complete!';
+  if (finalSummaryEl) finalSummaryEl.textContent = `${finishText} Final net worth: ${formatCurrency(summary)}.`;
+  try {
+    const pct = clamp(Math.round((summary / 100000) * 100), 0, 100);
+    if (finalNetFill) finalNetFill.style.width = `${pct}%`;
+    if (finalDetails) finalDetails.textContent = `Cash ${formatCurrency(state.stats.cash)}, Debt ${formatCurrency(state.stats.debt)}, Savings ${formatCurrency(state.stats.savings)}, Investments ${formatCurrency(state.stats.investments)}.`;
+  } catch (e) {}
+
+  if (elements.trackerText) elements.trackerText.textContent = 'Your story is complete. Replay to try a different money strategy.';
+  if (elements.turnLabel) elements.turnLabel.textContent = 'Final turn';
+  if (elements.scoreBadge) elements.scoreBadge.textContent = `Final ${state.score}`;
+}
+
 function updateLiveMiniStats() {
   const miniMap = {
     cash: document.getElementById('miniCashStat'),
@@ -551,68 +785,61 @@ function updateLiveMiniStats() {
 
 function updateLiveGameHud() {
   if (elements.liveScoreBadge) elements.liveScoreBadge.textContent = `Score ${state.score || 0}`;
-  if (elements.liveCashCount) elements.liveCashCount.textContent = String(liveCash);
-  if (elements.liveProgressFill) elements.liveProgressFill.style.width = `${Math.min(liveProgress, 100)}%`;
+  if (state.stats) liveCash = state.stats.cash;
+  if (elements.liveCashCount) elements.liveCashCount.textContent = formatCurrency(liveCash);
+  liveProgress = state.maxTurns ? (livePathStep / state.maxTurns) * 100 : 0;
+  liveX = 80 + (700 * liveProgress) / 100;
+  if (elements.liveProgressFill) elements.liveProgressFill.style.width = `${liveProgress}%`;
   updateLiveMiniStats();
   if (elements.marioPlayer) {
     elements.marioPlayer.style.left = `${liveX}px`;
   }
 }
 
-function applyLiveGameOffsetFromBoard(choiceEffects) {
-  const gain = (choiceEffects.income ?? 0) + (choiceEffects.savings ?? 0) + (choiceEffects.investments ?? 0) + (choiceEffects.cash ?? 0);
-  const penalty = (choiceEffects.debt ?? 0) + (choiceEffects.stress ?? 0) * 4;
-
-  const delta = Math.max(-70, Math.min(90, Math.round((gain / 200) - (penalty / 130))));
-  liveX = clamp(liveX + delta, 70, 780);
-  liveProgress = clamp(liveProgress + Math.max(6, delta / 2), 0, 100);
-  liveCash = clamp(liveCash + Math.max(0, Math.round((gain || 0) / 120)), 0, 200);
-  updateLiveGameHud();
+function getChoiceMovement(effects = {}) {
+  const costsMoney = (effects.cash ?? 0) < 0 || (effects.savings ?? 0) < 0 || (effects.investments ?? 0) < 0;
+  const addsDebt = (effects.debt ?? 0) > 0;
+  return costsMoney || addsDebt ? -1 : 1;
 }
 
-function triggerJump() {
-  if (!elements.marioPlayer) return;
-  elements.marioPlayer.classList.remove('jump');
-  void elements.marioPlayer.offsetWidth;
-  elements.marioPlayer.classList.add('jump');
-  setTimeout(() => elements.marioPlayer.classList.remove('jump'), 420);
-}
-
-function triggerCollect() {
-  liveCash += 25;
-  liveProgress = Math.min(liveProgress + 18, 100);
-  if (liveCash >= 100) {
-    if (elements.liveMissionText) elements.liveMissionText.textContent = 'You made it to the goal! Great work building your money habit.';
-    showToast('Level clear!', 1800);
-    launchConfetti(18);
-  } else {
-    if (elements.liveMissionText) elements.liveMissionText.textContent = 'Collect cash, avoid debt traps, and reach the finish line.';
-  }
-  updateLiveGameHud();
-}
-
-if (elements.leftBtn) elements.leftBtn.addEventListener('click', () => movePlayerBy(-38));
-if (elements.rightBtn) elements.rightBtn.addEventListener('click', () => movePlayerBy(38));
-if (elements.jumpBtn) elements.jumpBtn.addEventListener('click', triggerJump);
-if (elements.collectBtn) elements.collectBtn.addEventListener('click', triggerCollect);
 if (elements.backToBoardBtn) elements.backToBoardBtn.addEventListener('click', showBoardView);
 
-window.addEventListener('keydown', (event) => {
-  const key = event.key.toLowerCase();
-  const isRight = event.key === 'ArrowRight' || key === 'd';
-  const isLeft = event.key === 'ArrowLeft' || key === 'a';
-  const isJump = event.key === ' ' || event.key === 'ArrowUp' || key === 'w';
+// Navigation buttons
+if (builderNav) builderNav.addEventListener('click', showBuilderView);
+if (boardNav) boardNav.addEventListener('click', showBoardView);
+if (profileNav) profileNav.addEventListener('click', showProfileView);
 
-  if (isRight) {
-    event.preventDefault();
-    movePlayerBy(38);
-  }
-  if (isLeft) {
-    event.preventDefault();
-    movePlayerBy(-38);
-  }
-  if (isJump) {
-    event.preventDefault();
-    triggerJump();
-  }
+// Find and wire up liveGameNav
+const liveGameNav = document.getElementById('liveGameNav');
+if (liveGameNav) liveGameNav.addEventListener('click', showLiveGameView);
+
+// Builder and game start buttons
+elements.randomizeButton.addEventListener('click', () => {
+  state.currentScenario = null;
+  renderStarterStats();
+  appendStory('A new starter scenario was loaded.');
 });
+
+elements.startGameButton.addEventListener('click', () => {
+  startGame();
+});
+
+// Avatar picker events
+elements.playerName.addEventListener('input', syncPlayerIdentity);
+elements.playStyle.addEventListener('change', () => {
+  renderStarterStats();
+});
+
+// Play again
+if (playAgainBtn) playAgainBtn.addEventListener('click', () => {
+  startGame();
+});
+
+// Initialize page on load
+renderAvatarPicker();
+renderStarterStats();
+updateHud();
+renderBoard();
+renderEvent();
+showBuilderView();
+

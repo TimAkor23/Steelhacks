@@ -53,6 +53,15 @@
             <div class="player-character" id="marioPlayer">🧍</div>
             <div class="goal-block">🏁</div>
 
+            <div class="live-decision-modal" id="liveDecisionModal" role="dialog" aria-modal="true" aria-labelledby="livePromptTitle">
+              <div class="live-prompt-box">
+                <span class="event-card-label">Decision point</span>
+                <h3 id="livePromptTitle">Choose your next move</h3>
+                <p id="livePromptText">Your choices build your money story.</p>
+                <div id="livePromptChoices" class="live-choice-buttons"></div>
+              </div>
+            </div>
+
             <div class="enemy enemy-1">👾</div>
             <div class="enemy enemy-2">💸</div>
             <div class="enemy enemy-3">🧾</div>
@@ -61,10 +70,6 @@
           </div>
 
           <div class="live-controls">
-            <button id="leftBtn" class="secondary-btn live-btn movement-btn" type="button" aria-label="Move left">◀ Left</button>
-            <button id="rightBtn" class="secondary-btn live-btn movement-btn" type="button" aria-label="Move right">Right ▶</button>
-            <button id="jumpBtn" class="primary-btn live-btn" type="button">Jump</button>
-            <button id="collectBtn" class="secondary-btn live-btn" type="button">Collect</button>
             <button id="backToBoardBtn" class="secondary-btn live-btn" type="button">Life Board</button>
           </div>
         </section>
@@ -81,18 +86,6 @@
                 <span>Progress</span>
                 <div class="stat-meter"><div id="liveProgressFill" class="stat-fill"></div></div>
               </div>
-            </div>
-          </div>
-
-          <div class="live-prompt-panel">
-            <div class="panel-head prompt-head">
-              <h2>Decision</h2>
-              <span class="tiny-pill">Live prompt</span>
-            </div>
-            <div class="live-prompt-box">
-              <h3 id="livePromptTitle">Choose your next move</h3>
-              <p id="livePromptText">Your choices build your money story.</p>
-              <div id="livePromptChoices" class="live-choice-buttons"></div>
             </div>
           </div>
 
