@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import CharacterAvatar from "./CharacterAvatar";
+import type { CharacterAppearance } from "../lib/types";
 
 // Original SVG character art is drawn below; fonts are from Google Fonts.
 const skinTones = [
@@ -14,7 +16,6 @@ const hairstyles = {
   male: ["Short", "Long", "Curls"],
   female: ["Bob", "Long", "Ponytail", "Curls"],
 } as const;
-type Hairstyle = (typeof hairstyles)[keyof typeof hairstyles][number];
 const outfits = {
   top: [
     { name: "Ocean tee", color: "#2f80ed" },
@@ -51,16 +52,12 @@ const mindsetModifiers = {
 const scenarios = [
   { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 200, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
   { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 400, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
-  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 50, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
+  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 150, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
   { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 60, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
 
-export type CharacterSetup = {
+export type CharacterSetup = CharacterAppearance & {
   name: string;
-  gender: "male" | "female";
-  skinTone: (typeof skinTones)[number];
-  hairstyle: Hairstyle;
-  clothing: Record<ClothingPart, { name: string; color: string }>;
   mindset: Mindset;
   scenario: (typeof scenarios)[number] & { incomePeriod: "monthly"; incomeBasis: "take-home"; billsPeriod: "monthly" };
 };
@@ -106,13 +103,6 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   const hairstyle = hairstyles[gender][hairChoices[gender]];
   const skinTone = skinTones[skinIndex];
   const hairShape = hairstyle;
-  const hairBack = hairShape === "Bob" ? "M27 12H73V55H62V48H38V55H25V22Z"
-    : hairShape === "Ponytail" ? "M30 12H69V18H82V26H89V52H79V32H70V45H28V22Z"
-    : hairShape === "Long" ? "M27 12H73V59H65V67H25V22Z"
-    : hairShape === "Curls" ? (gender === "female"
-      ? "M23 23V14H30V8H40V11H48V6H58V10H69V15H77V29H81V44H77V60H68V65H60V53H35V63H25V55H20V39H23Z"
-      : "M23 23V14H30V8H40V11H48V6H58V10H69V15H77V29H73V46H27V29H23Z")
-    : "M30 12H70V46H27V22Z";
   const [name, setName] = useState("");
   const [clothes, setClothes] = useState({ top: 0, bottom: 0, shoes: 0 });
   const [mindset, setMindset] = useState<Mindset>("saver");
@@ -136,8 +126,8 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   if (mindset === "risk") {
     const scenarioName = scenarios[scenarioIndex].name;
     const reducedRiskScenarios: Record<string, { debt?: number; bills?: number; investments?: number; stress?: number }> = {
-      "Business Owner": { debt: 0.8, bills: 1.0, investments: 1.4, stress: 1.1 },
-      "Blue Collar Worker": { debt: 0.5, bills: 0.95, investments: 1.1, stress: 0.9 },
+      "Business Owner": { debt: 0.9, bills: 1.0, investments: 1.3, stress: 1.1 },
+      "Blue Collar Worker": { debt: 0.8, bills: 0.95, investments: 1.1, stress: 0.95 },
     };
 
     const reduction = reducedRiskScenarios[scenarioName];
@@ -150,7 +140,7 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   }
 
   if (scenarios[scenarioIndex].name === "Blue Collar Worker") {
-    scenario.debt = 50;
+    scenario.debt = Math.max(150, scenario.debt);
   }
   scenario.stress = Math.min(100, Math.max(0, scenario.stress));
   const money = (value: number) => new Intl.NumberFormat("en-US", {
@@ -232,23 +222,9 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
               </div>
               <span className="cloud cloud-one" aria-hidden="true">☁</span>
               <span className="cloud cloud-two" aria-hidden="true">☁</span>
-              <svg viewBox="0 0 100 140" className="character" role="img" aria-label={`${gender} character with ${skinTone.name.toLowerCase()} skin and ${hairShape.toLowerCase()} hair wearing ${top.name}, ${bottom.name}, and ${shoes.name}`} shapeRendering="crispEdges">
-                <ellipse cx="50" cy="133" rx="29" ry="4" fill="#17324f" opacity=".18" />
-                <path d={hairBack} fill="#51372e" />
-                <path d="M33 25H67V51H60V58H40V51H33Z" fill={skinTone.color} />
-                <path d={hairShape === "Curls" ? "M29 21H71V29H63V33H55V28H47V32H39V28H29Z" : "M33 24H67V29H57V21H33Z"} fill="#51372e" />
-                {hairShape === "Ponytail" && <path d="M74 20H82V25H74Z" fill="#ed4675" />}
-                <path d="M39 34H44V39H39ZM57 34H62V39H57Z" fill="#17324f" />
-                <path d="M45 46H56V49H45Z" fill="#9d4e49" />
-                <path d="M40 54H60V65H40Z" fill={skinTone.color} />
-                <path d="M29 61H71V71H79V88H67V95H33V88H21V71H29Z" fill={top.color} />
-                <path d="M44 61H56V66H44Z" fill={skinTone.color} />
-                <path d="M21 85H30V99H21ZM70 85H79V99H70Z" fill={skinTone.color} />
-                <path d="M33 94H67V119H54V104H46V119H33Z" fill={bottom.color} />
-                <path d="M33 117H46V128H27V121H33ZM54 117H67V121H73V128H54Z" fill={shoes.color} />
-                <path d="M27 128H46V132H27ZM54 128H73V132H54Z" fill="#17324f" />
-                <path d="M33 122H42V125H33ZM58 122H67V125H58Z" fill="#8ca1b3" />
-              </svg>
+              <div className="character">
+                <CharacterAvatar appearance={{ gender, skinTone, hairstyle, clothing: { top, bottom, shoes } }} />
+              </div>
               <div className="clothing-row hair">
                 <button type="button" aria-label="Previous hairstyle" onClick={() => cycleHair(-1)}>◀</button>
                 <span className="clothing-label">Hair</span>
@@ -392,8 +368,8 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
         .stat span { display:block; font-size:11px; margin-bottom:3px; } .stat strong { font-size:18px; }
         .footer { display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:30px; }
         .back { padding:12px 16px; } .continue-wrap { margin-left:auto; text-align:right; }
-        .continue-wrap p { font-size:12px; margin:0 0 10px; }
-        .continue { color:#fff; background:#dc202b; box-shadow:0 5px 0 #8f1720; padding:16px 20px; }
+        .continue-wrap p { font-size:14px; font-weight:700; margin:0 0 10px; }
+        .continue { color:#fff; background:#dc202b; box-shadow:0 5px 0 #8f1720; padding:18px 24px; font-size:16px; }
         .continue-wrap .hint { margin-top:14px; }
         button:hover:not(:disabled) { background:#fff17b; } .continue:hover:not(:disabled) { background:#b81723; } button:active:not(:disabled) { transform:translateY(2px); box-shadow:none; }
         button:disabled { opacity:.55; cursor:not-allowed; }
@@ -434,8 +410,8 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
           .stat span { font-size:10px; line-height:1.3; overflow-wrap:break-word; }
           .stat strong { font-size:15px; }
           .footer { margin-top:16px; gap:12px; }
-          .continue-wrap p { font-size:11px; margin-bottom:6px; }
-          .continue { padding:10px 14px; font-size:9px; }
+          .continue-wrap p { font-size:12px; margin-bottom:6px; }
+          .continue { padding:12px 16px; font-size:12px; }
           .continue-wrap .hint { margin-top:8px; }
         }
         @media(max-width:760px) { .columns { grid-template-columns:1fr; } .setup { padding:24px 14px 36px; } .panel { padding:18px; } .footer { flex-direction:column; align-items:stretch; } .continue-wrap { margin:0; text-align:center; } .continue { width:100%; } }

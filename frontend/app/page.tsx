@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import type {
   GameState,
@@ -9,6 +9,7 @@ import type {
 } from "../lib/types"
 
 import { calculateNetWorth, getRandomEvent } from "../lib/gameEngine"
+import { loadSaveSlots, storeSaveSlots } from "../lib/SaveGame"
 
 import TitleScreen from "../components/TitleScreen"
 import SaveSlotScreen from "../components/SaveSlotScreen"
@@ -22,13 +23,14 @@ type Screen = "title" | "saves" | "setup" | "game" | "results"
 
 const INITIAL_SAVES: SaveSlot[] = [null, null, null]
 
-function createSaveData(game: GameState): SaveData {
+function createSaveData(game: GameState, completed = false): SaveData {
   return {
     characterName: game.profile.characterName,
     occupation: game.profile.occupation,
     age: game.profile.startingAge + game.currentYear - 1,
     currentYear: game.currentYear,
     netWorth: calculateNetWorth(game.stats),
+    completed,
     game,
   }
 }
@@ -39,24 +41,33 @@ export default function Page() {
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null)
   const [activeGame, setActiveGame] = useState<GameState | null>(null)
 
-  const saveGameToSelectedSlot = (game: GameState) => {
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setSaves(loadSaveSlots()))
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
+  const saveGameToSelectedSlot = (game: GameState, completed = false) => {
     if (selectedSlot === null) return
 
-    const saveData = createSaveData(game)
+    const saveData = createSaveData(game, completed)
 
-    setSaves((previous) =>
-      previous.map((save, index) =>
+    setSaves((previous) => {
+      const updated = previous.map((save, index) =>
         index === selectedSlot - 1 ? saveData : save,
-      ),
-    )
+      )
+      storeSaveSlots(updated)
+      return updated
+    })
   }
 
   const handleDeleteSlot = (slotNumber: number) => {
-    setSaves((previous) =>
-      previous.map((save, index) =>
+    setSaves((previous) => {
+      const updated = previous.map((save, index) =>
         index === slotNumber - 1 ? null : save,
-      ),
-    )
+      )
+      storeSaveSlots(updated)
+      return updated
+    })
 
     if (selectedSlot === slotNumber) {
       setSelectedSlot(null)
@@ -75,7 +86,7 @@ export default function Page() {
     }
 
     setActiveGame(selectedSave.game)
-    setScreen("game")
+    setScreen(selectedSave.completed ? "results" : "game")
   }
 
   const handleSetupComplete = (character: CharacterSetup) => {
@@ -90,6 +101,12 @@ export default function Page() {
         startingAge: 20,
         occupation: finances.name,
         playStyle: character.mindset,
+        appearance: {
+          gender: character.gender,
+          skinTone: character.skinTone,
+          hairstyle: character.hairstyle,
+          clothing: character.clothing,
+        },
       },
 
       stats: {
@@ -112,6 +129,8 @@ export default function Page() {
 
       score: 0,
       currentYear: 1,
+      pathStep: 0,
+      furthestStep: 0,
       maxYears: 10,
       currentEvent: firstEvent,
       recentEventTitles: [firstEvent.title],
@@ -130,8 +149,28 @@ export default function Page() {
 
   const handleGameFinish = (finishedGame: GameState) => {
     setActiveGame(finishedGame)
-    saveGameToSelectedSlot(finishedGame)
+    saveGameToSelectedSlot(finishedGame, true)
     setScreen("results")
+  }
+
+  const handlePlayAgain = () => {
+    if (!activeGame) return
+
+    const firstEvent = getRandomEvent()
+    const replay: GameState = {
+      ...activeGame,
+      score: 0,
+      currentYear: 1,
+      pathStep: 0,
+      furthestStep: 0,
+      currentEvent: firstEvent,
+      recentEventTitles: [firstEvent.title],
+      history: [],
+    }
+
+    setActiveGame(replay)
+    saveGameToSelectedSlot(replay)
+    setScreen("game")
   }
 
   if (screen === "title") {
@@ -174,7 +213,7 @@ export default function Page() {
       <ResultsScreen
         game={activeGame}
         onBackToSaves={() => setScreen("saves")}
-        onPlayAgain={() => setScreen("setup")}
+        onPlayAgain={handlePlayAgain}
       />
     )
   }

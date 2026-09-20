@@ -10,6 +10,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Take the job",
         icon: "💼",
         effects: {
+          health: -2, relationships: -2, morale: 6, smarts: 3,
           income: 9000,
           cash: 2500,
           savings: 1000,
@@ -20,6 +21,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Keep your current job and build skills",
         icon: "🛠️",
         effects: {
+          health: 2, relationships: 1, morale: 4, smarts: 8,
           income: 2000,
           savings: 1500,
           stress: -6,
@@ -30,6 +32,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Focus on school",
         icon: "🎓",
         effects: {
+          health: 3, relationships: -1, morale: 5, smarts: 10,
           stress: -12,
           cash: 400,
           savings: 1200,
@@ -47,6 +50,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Use savings to fix it",
         icon: "💸",
         effects: {
+          health: 2, relationships: 0, morale: -2, smarts: 3,
           savings: -1800,
           cash: -600,
           stress: 8,
@@ -57,6 +61,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Borrow money and repay it later",
         icon: "🤝",
         effects: {
+          health: -2, relationships: -3, morale: -3, smarts: 1,
           debt: 1200,
           stress: 6,
           score: 5,
@@ -66,6 +71,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Delay the repair",
         icon: "🚗",
         effects: {
+          health: -5, relationships: -2, morale: -5, smarts: 0,
           cash: -500,
           stress: 10,
           score: 2,
@@ -81,6 +87,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Put it into savings",
         icon: "🏦",
         effects: {
+          health: 2, relationships: 0, morale: 5, smarts: 2,
           savings: 2200,
           score: 20,
         },
@@ -89,6 +96,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Pay down debt",
         icon: "✂️",
         effects: {
+          health: 3, relationships: 1, morale: 6, smarts: 3,
           debt: -1800,
           cash: 800,
           score: 18,
@@ -98,6 +106,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Spend it on career training",
         icon: "📚",
         effects: {
+          health: 1, relationships: -1, morale: 6, smarts: 10,
           investments: 1500,
           income: 3000,
           stress: -4,
@@ -115,6 +124,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Move somewhere cheaper",
         icon: "📦",
         effects: {
+          health: 3, relationships: -3, morale: 4, smarts: 3,
           bills: -260,
           savings: 900,
           stress: -8,
@@ -125,6 +135,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Find a roommate",
         icon: "👥",
         effects: {
+          health: 2, relationships: 7, morale: 4, smarts: 2,
           cash: 600,
           savings: 1000,
           stress: -6,
@@ -135,6 +146,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Stay and reduce other spending",
         icon: "✂️",
         effects: {
+          health: -3, relationships: -2, morale: -4, smarts: 3,
           cash: -300,
           stress: 12,
           score: 8,
@@ -150,6 +162,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Help immediately",
         icon: "🤲",
         effects: {
+          health: -4, relationships: 10, morale: 3, smarts: 1,
           cash: -1500,
           savings: -1000,
           stress: 16,
@@ -160,6 +173,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Offer a smaller payment plan",
         icon: "🕒",
         effects: {
+          health: -1, relationships: 5, morale: 2, smarts: 4,
           cash: -400,
           stress: 8,
           score: 9,
@@ -169,6 +183,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Protect your budget",
         icon: "🚫",
         effects: {
+          health: 2, relationships: -5, morale: -2, smarts: 2,
           stress: -6,
           score: 12,
         },
@@ -184,6 +199,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Reinvest into the business",
         icon: "🚀",
         effects: {
+          health: -3, relationships: -2, morale: 7, smarts: 7,
           income: 4500,
           investments: 2300,
           score: 25,
@@ -193,6 +209,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Pay down debt",
         icon: "🏦",
         effects: {
+          health: 3, relationships: 1, morale: 6, smarts: 3,
           debt: -2700,
           cash: 1400,
           score: 20,
@@ -202,6 +219,7 @@ export const eventTemplates: LifeEvent[] = [
         text: "Build an emergency fund",
         icon: "🧰",
         effects: {
+          health: 4, relationships: 2, morale: 5, smarts: 3,
           savings: 2600,
           score: 18,
         },
