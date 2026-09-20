@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Life Ledger | Monopoly Life Adventure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="cloud cloud-one">☁️</div>
+      <div class="cloud cloud-two">☁️</div>
+      <div class="coin-float coin-float-one">🪙</div>
+      <div class="coin-float coin-float-two">🪙</div>
+
+      <header class="topbar">
+        <div class="brand-wrap">
+          <p class="eyebrow">Board Game Mode</p>
+          <h1>Life Ledger</h1>
+        </div>
+        <div class="status-cluster">
+          <nav style="display:flex; gap:10px; align-items:center;">
+            <button id="builderNav" class="secondary-btn small-btn" type="button">Builder</button>
+            <button id="boardNav" class="secondary-btn small-btn" type="button">Board</button>
+            <button id="liveGameNav" class="secondary-btn small-btn" type="button">Live Game</button>
+            <button id="profileNav" class="secondary-btn small-btn" type="button">Profile</button>
+          </nav>
+          <span class="status-badge" id="worldBadge">World 1-1</span>
+          <span class="mini-coin" id="levelBadge">Lv. 1</span>
+        </div>
+      </header>
+
+      <main id="liveGameView" class="game-shell game-shell-live">
+        <section class="panel live-scene-panel live-scene-panel-primary">
+          <div class="panel-head live-scene-head">
+            <h2>Live Game</h2>
+            <span class="tiny-pill" id="liveScoreBadge">Score 0</span>
+          </div>
+
+          <div class="mario-scene">
+            <div class="skyline"></div>
+            <div class="cloud cloud-one small">☁️</div>
+            <div class="cloud cloud-two small">☁️</div>
+
+            <div class="coin-panel">
+              <span>💰</span>
+              <strong id="liveCashCount">0</strong>
+            </div>
+
+            <div class="player-character" id="marioPlayer">🧍</div>
+            <div class="goal-block">🏁</div>
+
+            <div class="enemy enemy-1">👾</div>
+            <div class="enemy enemy-2">💸</div>
+            <div class="enemy enemy-3">🧾</div>
+
+            <div class="ground"></div>
+          </div>
+
+          <div class="live-controls">
+            <button id="leftBtn" class="secondary-btn live-btn movement-btn" type="button" aria-label="Move left">◀ Left</button>
+            <button id="rightBtn" class="secondary-btn live-btn movement-btn" type="button" aria-label="Move right">Right ▶</button>
+            <button id="jumpBtn" class="primary-btn live-btn" type="button">Jump</button>
+            <button id="collectBtn" class="secondary-btn live-btn" type="button">Collect</button>
+            <button id="backToBoardBtn" class="secondary-btn live-btn" type="button">Life Board</button>
+          </div>
+        </section>
+
+        <aside class="panel panel-right live-side-panel">
+          <div class="mission-summary">
+            <div class="panel-head mission-head">
+              <h2>Mission</h2>
+              <span class="tiny-pill">Run</span>
+            </div>
+            <div class="live-status-box">
+              <p id="liveMissionText">Collect cash, avoid debt traps, and reach the finish line.</p>
+              <div class="live-meter-wrap">
+                <span>Progress</span>
+                <div class="stat-meter"><div id="liveProgressFill" class="stat-fill"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="live-prompt-panel">
+            <div class="panel-head prompt-head">
+              <h2>Decision</h2>
+              <span class="tiny-pill">Live prompt</span>
+            </div>
+            <div class="live-prompt-box">
+              <h3 id="livePromptTitle">Choose your next move</h3>
+              <p id="livePromptText">Your choices build your money story.</p>
+              <div id="livePromptChoices" class="live-choice-buttons"></div>
+            </div>
+          </div>
+
+          <div class="mini-stats-panel">
+            <div class="panel-head mini-stats-head">
+              <h2>Stats</h2>
+              <span class="tiny-pill">Live</span>
+            </div>
+            <div class="mini-stat-grid">
+              <div class="mini-stat-card"><span>Cash</span><strong id="miniCashStat">$0</strong></div>
+              <div class="mini-stat-card"><span>Debt</span><strong id="miniDebtStat">$0</strong></div>
+              <div class="mini-stat-card"><span>Income</span><strong id="miniIncomeStat">$0</strong></div>
+              <div class="mini-stat-card"><span>Savings</span><strong id="miniSavingsStat">$0</strong></div>
+              <div class="mini-stat-card"><span>Invest</span><strong id="miniInvestStat">$0</strong></div>
+              <div class="mini-stat-card"><span>Stress</span><strong id="miniStressStat">0</strong></div>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <main id="builderView" class="game-shell hidden">
+        <section class="panel panel-left">
+          <div class="panel-head">
+            <h2>Character Builder</h2>
+            <span class="tiny-pill">Create hero</span>
+          </div>
+
+          <div class="player-card">
+            <div class="avatar-ring" id="selectedAvatar">🧒</div>
+            <div>
+              <p class="player-label">Hero</p>
+              <h3 id="selectedNameLabel">Future Builder</h3>
+            </div>
+          </div>
+
+          <div class="avatar-picker" id="avatarPicker" aria-label="Choose avatar"></div>
+
+          <div class="form-block">
+            <label>
+              Player name
+              <input id="playerName" type="text" value="Future Builder" maxlength="18" />
+            </label>
+          </div>
+
+          <div class="form-block">
+            <label>
+              Money mindset
+              <select id="playStyle">
+                <option value="saver" selected>Planner</option>
+                <option value="builder">Builder</option>
+                <option value="risk">Risk taker</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="preset-box">
+            <div class="preset-row">
+              <span>Starter scenario</span>
+              <button id="randomizeButton" type="button" class="secondary-btn small-btn">Randomize</button>
+            </div>
+            <div class="profile-grid" id="starterStats"></div>
+          </div>
+
+          <div class="button-row compact-row">
+            <button id="startGameButton" type="button" class="primary-btn">Start adventure</button>
+          </div>
+        </section>
+
+      </main>
+
+      <main id="boardView" class="game-shell hidden">
+        <section class="panel board-panel board-main-panel">
+          <div class="panel-head">
+            <h2>Life board</h2>
+            <span class="tiny-pill" id="turnLabel">Turn 1</span>
+          </div>
+
+          <div class="board-wrap board-hero-wrap">
+            <div class="board-track board-track-large" id="boardTrack"></div>
+            <div class="token board-token" id="tokenMarker">🧍</div>
+            <div id="boardActions" class="board-actions" aria-live="polite"></div>
+          </div>
+
+          <div class="quest-banner">
+            <div class="banner-icon">🎯</div>
+            <div>
+              <span>Quest tracker</span>
+              <strong id="trackerText">Build a stable cash cushion and keep your future on track.</strong>
+            </div>
+          </div>
+
+          <div class="event-card visual-event-card">
+            <span class="event-card-label">Current event</span>
+            <h3 id="eventTitle">Random life event</h3>
+            <p id="eventText">Choose a path to decide how your story unfolds.</p>
+            <div id="choiceButtons" class="choice-buttons hidden"></div>
+          </div>
+        </section>
+
+        <aside class="panel panel-right" id="liveHud">
+          <div class="panel-head">
+            <h2>Stats</h2>
+            <span class="tiny-pill" id="scoreBadge">Score 0</span>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span>Cash</span>
+              <strong id="cashValue">$0</strong>
+            </div>
+            <div class="stat-box">
+              <span>Debt</span>
+              <strong id="debtValue">$0</strong>
+            </div>
+            <div class="stat-box">
+              <span>Income</span>
+              <strong id="incomeValue">$0</strong>
+            </div>
+            <div class="stat-box">
+              <span>Savings</span>
+              <strong id="savingsValue">$0</strong>
+            </div>
+            <div class="stat-box">
+              <span>Investments</span>
+              <strong id="investmentValue">$0</strong>
+            </div>
+            <div class="stat-box">
+              <span>Stress</span>
+              <strong id="stressValue">0</strong>
+            </div>
+          </div>
+
+          <div class="story-pane">
+            <h3>Story log</h3>
+            <div id="storyLog" class="story-log"></div>
+          </div>
+        </aside>
+      </main>
+
+      <main id="statsView" class="game-shell hidden">
+        <section class="panel panel-left">
+          <div class="panel-head">
+            <h2>Summary</h2>
+            <span class="tiny-pill">Final results</span>
+          </div>
+          <div style="padding:14px;">
+            <h3 id="finalTitle">Adventure complete</h3>
+            <p id="finalSummary">Final net worth and analysis will appear here.</p>
+            <div style="margin-top:18px;"><button id="playAgainBtn" class="primary-btn">Play again</button></div>
+          </div>
+        </section>
+
+        <section class="panel board-panel">
+          <div class="panel-head">
+            <h2>Visual stats</h2>
+            <span class="tiny-pill">Final meters</span>
+          </div>
+          <div style="padding:12px;">
+            <div class="meter-row"><div>Final net worth</div><div class="stat-meter"><div id="finalNetFill" class="stat-fill"></div></div></div>
+            <div style="height:12px"></div>
+            <div id="finalDetails"></div>
+          </div>
+        </section>
+
+        <aside class="panel panel-right">
+          <div class="panel-head">
+            <h2>Stats</h2>
+            <span class="tiny-pill" id="profileScore">Score 0</span>
+          </div>
+          <div style="padding:12px;">
+            <p id="profileSummary">A quick visual summary of the player's financial state.</p>
+          </div>
+        </aside>
+      </main>
+
+      <main id="profileView" class="game-shell hidden">
+        <section class="panel panel-left">
+          <div class="panel-head">
+            <h2>Profile</h2>
+            <span class="tiny-pill">Overview</span>
+          </div>
+          <div class="player-card">
+            <div class="avatar-ring" id="profileAvatar">🧒</div>
+            <div>
+              <p class="player-label">Player</p>
+              <h3 id="profileName">Future Builder</h3>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <button id="backToBoard" class="primary-btn">Back to board</button>
+          </div>
+        </section>
+
+        <section class="panel board-panel">
+          <div class="panel-head">
+            <h2>Visual stats</h2>
+            <span class="tiny-pill">Live meters</span>
+          </div>
+
+          <div class="board-wrap">
+            <div style="display:grid; gap:12px;">
+              <div class="meter-row">
+                <div>Cash</div>
+                <div class="stat-meter"><div id="cashFill" class="stat-fill"></div></div>
+              </div>
+              <div class="meter-row">
+                <div>Debt</div>
+                <div class="stat-meter"><div id="debtFill" class="stat-fill"></div></div>
+              </div>
+              <div class="meter-row">
+                <div>Income</div>
+                <div class="stat-meter"><div id="incomeFill" class="stat-fill"></div></div>
+              </div>
+              <div class="meter-row">
+                <div>Savings</div>
+                <div class="stat-meter"><div id="savingsFill" class="stat-fill"></div></div>
+              </div>
+              <div class="meter-row">
+                <div>Investments</div>
+                <div class="stat-meter"><div id="investmentsFill" class="stat-fill"></div></div>
+              </div>
+              <div class="meter-row">
+                <div>Stress</div>
+                <div class="stat-meter"><div id="stressFill" class="stat-fill danger"></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel panel-right">
+          <div class="panel-head">
+            <h2>Summary</h2>
+            <span class="tiny-pill" id="profileScore">Score 0</span>
+          </div>
+          <div style="padding:12px;">
+            <p id="profileSummary">A quick visual summary of the player's financial state.</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+    <div id="detailModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="panel" style="max-width:520px; margin:40px auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <h3 id="detailTitle">Event details</h3>
+          <button id="detailClose" class="small-btn">Close</button>
+        </div>
+        <div id="detailContent" style="margin-top:12px; font-size:0.9rem; color:var(--text);">Full event detail appears here.</div>
+      </div>
+    </div>
+  </body>
+</html>
