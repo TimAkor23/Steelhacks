@@ -49,10 +49,10 @@ const mindsetModifiers = {
 // Fictional monthly take-home income and personal expenses; balances are one-time amounts.
 // Taxes are already included in take-home income. Keep taxes: 0 for the existing payload.
 const scenarios = [
-  { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 9000, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
-  { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 8000, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
-  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 1500, savings: 800, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
-  { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 6000, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
+  { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 200, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
+  { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 400, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
+  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 1500, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
+  { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 60, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
 
 export type CharacterSetup = {
