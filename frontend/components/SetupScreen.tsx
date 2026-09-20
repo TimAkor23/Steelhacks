@@ -51,7 +51,7 @@ const mindsetModifiers = {
 const scenarios = [
   { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 200, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
   { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 400, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
-  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 1500, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
+  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 50, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
   { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 60, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
 
@@ -131,6 +131,26 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   const modifiers = mindsetModifiers[mindset];
   for (const key of Object.keys(modifiers) as (keyof typeof modifiers)[]) {
     scenario[key] = Math.round(scenarios[scenarioIndex][key] * modifiers[key]);
+  }
+
+  if (mindset === "risk") {
+    const scenarioName = scenarios[scenarioIndex].name;
+    const reducedRiskScenarios: Record<string, { debt?: number; bills?: number; investments?: number; stress?: number }> = {
+      "Business Owner": { debt: 0.8, bills: 1.0, investments: 1.4, stress: 1.1 },
+      "Blue Collar Worker": { debt: 0.5, bills: 0.95, investments: 1.1, stress: 0.9 },
+    };
+
+    const reduction = reducedRiskScenarios[scenarioName];
+    if (reduction) {
+      if (reduction.debt !== undefined) scenario.debt = Math.round(scenarios[scenarioIndex].debt * reduction.debt);
+      if (reduction.bills !== undefined) scenario.bills = Math.round(scenarios[scenarioIndex].bills * reduction.bills);
+      if (reduction.investments !== undefined) scenario.investments = Math.round(scenarios[scenarioIndex].investments * reduction.investments);
+      if (reduction.stress !== undefined) scenario.stress = Math.min(100, Math.max(0, Math.round(scenarios[scenarioIndex].stress * reduction.stress)));
+    }
+  }
+
+  if (scenarios[scenarioIndex].name === "Blue Collar Worker") {
+    scenario.debt = 50;
   }
   scenario.stress = Math.min(100, Math.max(0, scenario.stress));
   const money = (value: number) => new Intl.NumberFormat("en-US", {
