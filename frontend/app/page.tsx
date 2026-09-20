@@ -101,6 +101,12 @@ export default function Page() {
         startingAge: 20,
         occupation: finances.name,
         playStyle: character.mindset,
+        appearance: {
+          gender: character.gender,
+          skinTone: character.skinTone,
+          hairstyle: character.hairstyle,
+          clothing: character.clothing,
+        },
       },
 
       stats: {
@@ -123,6 +129,8 @@ export default function Page() {
 
       score: 0,
       currentYear: 1,
+      pathStep: 0,
+      furthestStep: 0,
       maxYears: 10,
       currentEvent: firstEvent,
       recentEventTitles: [firstEvent.title],
@@ -153,6 +161,8 @@ export default function Page() {
       ...activeGame,
       score: 0,
       currentYear: 1,
+      pathStep: 0,
+      furthestStep: 0,
       currentEvent: firstEvent,
       recentEventTitles: [firstEvent.title],
       history: [],

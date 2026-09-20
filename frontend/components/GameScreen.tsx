@@ -1,13 +1,16 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import CharacterAvatar from "./CharacterAvatar"
+import { eventTemplates } from "../data/events"
 
-import type { ChoiceEffects, GameChoice, GameState } from "../lib/types"
+import type { ChoiceEffects, GameChoice, GameState, LifeBalance } from "../lib/types"
 import {
   applyChoiceEffects,
   calculateNetWorth,
   formatCurrency,
   getRandomEvent,
+  getChoiceMovement,
 } from "../lib/gameEngine"
 
 interface GameScreenProps {
@@ -25,19 +28,24 @@ export default function GameScreen({
   onFinish,
   onBackToSaves,
 }: GameScreenProps) {
+  const pathStep = game.pathStep ?? game.currentYear - 1
+  const furthestStep = game.furthestStep ?? pathStep
   const normalProgress = Math.max(
     0,
-    Math.min(100, ((game.currentYear - 1) / game.maxYears) * 100),
+    Math.min(100, (pathStep / game.maxYears) * 100),
   )
 
   const [visualProgress, setVisualProgress] = useState(normalProgress)
   const [isResolving, setIsResolving] = useState(false)
   const [reaction, setReaction] = useState<Reaction>(null)
+  const [pendingBalance, setPendingBalance] = useState<LifeBalance | null>(null)
+  const visibleBalance = pendingBalance ?? game.balance
 
   useEffect(() => {
     setVisualProgress(normalProgress)
     setIsResolving(false)
     setReaction(null)
+    setPendingBalance(null)
   }, [normalProgress, game.currentEvent.title])
 
   const netWorth = calculateNetWorth(game.stats)
@@ -67,36 +75,50 @@ export default function GameScreen({
 
     setIsResolving(true)
 
+    // Existing saves may contain a question created before explicit balance effects existed.
+    const templateEffects = eventTemplates.find((event) => event.title === game.currentEvent.title)
+      ?.choices.find((option) => option.text === choice.text)?.effects
+    const effects: ChoiceEffects = { ...choice.effects }
+    for (const key of ["health", "relationships", "morale", "smarts"] as const) {
+      if (effects[key] === undefined && templateEffects?.[key] !== undefined) effects[key] = templateEffects[key]
+    }
+
     const result = applyChoiceEffects(
       game.stats,
       game.balance,
       game.score,
-      choice.effects,
+      effects,
     )
+
+    const bigWin = isBigWin(effects)
+    const setback = getChoiceMovement(effects) < 0
+    const bigLoss = isBigLoss(effects)
+    setPendingBalance(result.balance)
+    const nextStep = Math.max(0, Math.min(game.maxYears, pathStep + (setback ? -1 : 1)))
+    const nextProgress = (nextStep / game.maxYears) * 100
 
     const updatedGame: GameState = {
       ...game,
       stats: result.stats,
       balance: result.balance,
       score: result.score,
+      pathStep: nextStep,
+      furthestStep: Math.max(furthestStep, nextStep),
       history: [
         ...game.history,
         `Year ${game.currentYear}: ${choice.text}`,
       ],
     }
 
-    const bigWin = isBigWin(choice.effects)
-    const bigLoss = isBigLoss(choice.effects)
+    if (setback || bigLoss) setReaction("loss")
+    else if (bigWin) setReaction("win")
 
-    if (bigWin) setReaction("win")
-    else if (bigLoss) setReaction("loss")
-
-    const finishedAllYears = game.currentYear >= game.maxYears
+    const reachedFlag = nextStep >= game.maxYears
     const ranOutOfCash = result.stats.cash < 0
     const lostIncome = result.stats.income <= 0
 
-    if (finishedAllYears || ranOutOfCash || lostIncome) {
-      setVisualProgress(100)
+    if (reachedFlag || ranOutOfCash || lostIncome) {
+      setVisualProgress(nextProgress)
       window.setTimeout(() => onFinish(updatedGame), 750)
       return
     }
@@ -104,9 +126,7 @@ export default function GameScreen({
     const nextEvent = getRandomEvent(game.recentEventTitles)
     const nextYear = game.currentYear + 1
 
-    setVisualProgress(
-      Math.min(100, ((nextYear - 1) / game.maxYears) * 100),
-    )
+    setVisualProgress(nextProgress)
 
     window.setTimeout(() => {
       onChange({
@@ -122,6 +142,8 @@ export default function GameScreen({
   }
 
   const playerPosition = 5 + visualProgress * 0.84
+  // Committed progress updates after the movement finishes and survives save/resume.
+  const completedPosition = 5 + Math.min(100, (furthestStep / game.maxYears) * 100) * 0.84
 
   return (
     <main className="ll-screen min-h-screen overflow-hidden p-4 md:p-6">
@@ -130,7 +152,7 @@ export default function GameScreen({
           <div>
             <span className="ll-brand">LIFE LEDGER</span>
             <h1 className="mt-3 text-2xl font-black text-white [text-shadow:2px_2px_0_#17324f] md:text-4xl">
-              World {game.currentYear}-{game.maxYears}
+              Year {game.currentYear}
             </h1>
             <p className="mt-1 font-bold text-slate-800">
               {game.profile.characterName} · {game.profile.occupation}
@@ -163,7 +185,7 @@ export default function GameScreen({
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-red-600">
                   Live game
                 </p>
-                <p className="mt-1 font-bold text-slate-700">{missionText}</p>
+                <p className="mt-1 font-bold text-slate-700" role="status">{reaction === "loss" ? (pathStep === 0 ? "Setback! You’re at the start, so your position stays here." : "Setback! Move back one space.") : missionText}</p>
               </div>
               <div className="rounded-lg border-2 border-slate-800 bg-white px-3 py-2 text-right">
                 <p className="text-[10px] font-black uppercase text-slate-500">Cash</p>
@@ -181,20 +203,26 @@ export default function GameScreen({
               <div aria-hidden="true" className="absolute bottom-0 left-0 h-[78px] w-full border-t-4 border-slate-800 bg-[repeating-linear-gradient(90deg,#8b5a2b_0_28px,#9e6a36_28px_56px)]" />
               <div aria-hidden="true" className="absolute bottom-[76px] left-0 h-4 w-full bg-green-500" />
 
-              <div aria-hidden="true" className="absolute bottom-[82px] left-[28%] text-4xl">👾</div>
-              <div aria-hidden="true" className="absolute bottom-[82px] left-[53%] text-4xl">💸</div>
-              <div aria-hidden="true" className="absolute bottom-[82px] left-[73%] text-4xl">🧾</div>
-              <div aria-hidden="true" className="absolute bottom-[77px] right-[3%] text-6xl">🏁</div>
+              {[
+                { position: 28, emoji: "👾" },
+                { position: 53, emoji: "💸" },
+                { position: 73, emoji: "🧾" },
+              ].filter((obstacle) => completedPosition < obstacle.position).map((obstacle) => (
+                <div key={obstacle.position} aria-hidden="true" className="absolute bottom-[82px] text-4xl" style={{ left: `${obstacle.position}%` }}>
+                  {obstacle.emoji}
+                </div>
+              ))}
+              <div aria-hidden="true" className="absolute bottom-[77px] left-[89%] text-6xl">🏁</div>
 
               <div
                 aria-label={`Player is ${Math.round(visualProgress)} percent through the game`}
-                className="absolute bottom-[78px] z-20 text-6xl transition-[left,transform] duration-700 ease-out"
+                className="absolute bottom-[78px] z-20 h-[67.2px] w-[48px] transition-[left,transform] duration-700 ease-out"
                 style={{
                   left: `${playerPosition}%`,
                   transform: reaction === "win" ? "translateY(-28px)" : "translateY(0)",
                 }}
               >
-                🧍
+                <CharacterAvatar appearance={game.profile.appearance} />
               </div>
 
               {reaction === "win" && (
@@ -279,10 +307,10 @@ export default function GameScreen({
 
             <h3 className="mt-6 text-lg font-black">Life Balance</h3>
             <div className="mt-3 space-y-3">
-              <Meter label="Health" value={game.balance.health} color="#22c55e" />
-              <Meter label="Relationships" value={game.balance.relationships} color="#ec4899" />
-              <Meter label="Morale" value={game.balance.morale} color="#f59e0b" />
-              <Meter label="Smarts" value={game.balance.smarts} color="#3b82f6" />
+              <Meter label="Health" value={visibleBalance.health} color="#22c55e" />
+              <Meter label="Relationships" value={visibleBalance.relationships} color="#ec4899" />
+              <Meter label="Morale" value={visibleBalance.morale} color="#f59e0b" />
+              <Meter label="Smarts" value={visibleBalance.smarts} color="#3b82f6" />
             </div>
 
             <div className="mt-6">

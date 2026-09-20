@@ -38,7 +38,7 @@ export default function ResultsScreen({
         </h1>
 
         <p className="mt-3 text-slate-700">
-          You completed {game.maxYears} years of financial decisions.
+          You played through {game.currentYear} years of financial decisions.
         </p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3">

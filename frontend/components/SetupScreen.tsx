@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import CharacterAvatar from "./CharacterAvatar";
+import type { CharacterAppearance } from "../lib/types";
 
 // Original SVG character art is drawn below; fonts are from Google Fonts.
 const skinTones = [
@@ -14,7 +16,6 @@ const hairstyles = {
   male: ["Short", "Long", "Curls"],
   female: ["Bob", "Long", "Ponytail", "Curls"],
 } as const;
-type Hairstyle = (typeof hairstyles)[keyof typeof hairstyles][number];
 const outfits = {
   top: [
     { name: "Ocean tee", color: "#2f80ed" },
@@ -55,12 +56,8 @@ const scenarios = [
   { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 60, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
 
-export type CharacterSetup = {
+export type CharacterSetup = CharacterAppearance & {
   name: string;
-  gender: "male" | "female";
-  skinTone: (typeof skinTones)[number];
-  hairstyle: Hairstyle;
-  clothing: Record<ClothingPart, { name: string; color: string }>;
   mindset: Mindset;
   scenario: (typeof scenarios)[number] & { incomePeriod: "monthly"; incomeBasis: "take-home"; billsPeriod: "monthly" };
 };
@@ -106,13 +103,6 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
   const hairstyle = hairstyles[gender][hairChoices[gender]];
   const skinTone = skinTones[skinIndex];
   const hairShape = hairstyle;
-  const hairBack = hairShape === "Bob" ? "M27 12H73V55H62V48H38V55H25V22Z"
-    : hairShape === "Ponytail" ? "M30 12H69V18H82V26H89V52H79V32H70V45H28V22Z"
-    : hairShape === "Long" ? "M27 12H73V59H65V67H25V22Z"
-    : hairShape === "Curls" ? (gender === "female"
-      ? "M23 23V14H30V8H40V11H48V6H58V10H69V15H77V29H81V44H77V60H68V65H60V53H35V63H25V55H20V39H23Z"
-      : "M23 23V14H30V8H40V11H48V6H58V10H69V15H77V29H73V46H27V29H23Z")
-    : "M30 12H70V46H27V22Z";
   const [name, setName] = useState("");
   const [clothes, setClothes] = useState({ top: 0, bottom: 0, shoes: 0 });
   const [mindset, setMindset] = useState<Mindset>("saver");
@@ -232,23 +222,9 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
               </div>
               <span className="cloud cloud-one" aria-hidden="true">☁</span>
               <span className="cloud cloud-two" aria-hidden="true">☁</span>
-              <svg viewBox="0 0 100 140" className="character" role="img" aria-label={`${gender} character with ${skinTone.name.toLowerCase()} skin and ${hairShape.toLowerCase()} hair wearing ${top.name}, ${bottom.name}, and ${shoes.name}`} shapeRendering="crispEdges">
-                <ellipse cx="50" cy="133" rx="29" ry="4" fill="#17324f" opacity=".18" />
-                <path d={hairBack} fill="#51372e" />
-                <path d="M33 25H67V51H60V58H40V51H33Z" fill={skinTone.color} />
-                <path d={hairShape === "Curls" ? "M29 21H71V29H63V33H55V28H47V32H39V28H29Z" : "M33 24H67V29H57V21H33Z"} fill="#51372e" />
-                {hairShape === "Ponytail" && <path d="M74 20H82V25H74Z" fill="#ed4675" />}
-                <path d="M39 34H44V39H39ZM57 34H62V39H57Z" fill="#17324f" />
-                <path d="M45 46H56V49H45Z" fill="#9d4e49" />
-                <path d="M40 54H60V65H40Z" fill={skinTone.color} />
-                <path d="M29 61H71V71H79V88H67V95H33V88H21V71H29Z" fill={top.color} />
-                <path d="M44 61H56V66H44Z" fill={skinTone.color} />
-                <path d="M21 85H30V99H21ZM70 85H79V99H70Z" fill={skinTone.color} />
-                <path d="M33 94H67V119H54V104H46V119H33Z" fill={bottom.color} />
-                <path d="M33 117H46V128H27V121H33ZM54 117H67V121H73V128H54Z" fill={shoes.color} />
-                <path d="M27 128H46V132H27ZM54 128H73V132H54Z" fill="#17324f" />
-                <path d="M33 122H42V125H33ZM58 122H67V125H58Z" fill="#8ca1b3" />
-              </svg>
+              <div className="character">
+                <CharacterAvatar appearance={{ gender, skinTone, hairstyle, clothing: { top, bottom, shoes } }} />
+              </div>
               <div className="clothing-row hair">
                 <button type="button" aria-label="Previous hairstyle" onClick={() => cycleHair(-1)}>◀</button>
                 <span className="clothing-label">Hair</span>

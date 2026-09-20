@@ -1,3 +1,10 @@
+export interface CharacterAppearance {
+  gender: "male" | "female"
+  skinTone: { name: string; color: string }
+  hairstyle: "Short" | "Long" | "Curls" | "Bob" | "Ponytail"
+  clothing: Record<"top" | "bottom" | "shoes", { name: string; color: string }>
+}
+
 export type PlayStyle = "saver" | "builder" | "risk"
 
 export interface GameStats {
@@ -44,6 +51,7 @@ export interface LifeProfile {
   startingAge: number
   occupation: string
   playStyle: PlayStyle
+  appearance?: CharacterAppearance
 }
 
 export interface GameState {
@@ -53,6 +61,8 @@ export interface GameState {
   score: number
   currentYear: number
   maxYears: number
+  pathStep?: number
+  furthestStep?: number
   currentEvent: LifeEvent
   recentEventTitles: string[]
   history: string[]

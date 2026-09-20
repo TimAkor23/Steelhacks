@@ -141,3 +141,12 @@ export function applyChoiceEffects(
 export function calculateNetWorth(stats: GameStats) {
   return stats.cash + stats.savings + stats.investments - stats.debt
 }
+
+// Setbacks describe resource costs, not a judgment that a life choice is wrong.
+export function getChoiceMovement(effects: ChoiceEffects): -1 | 1 {
+  const financialSetback = (effects.cash ?? 0) < 0 ||
+    (effects.savings ?? 0) < 0 || (effects.investments ?? 0) < 0 ||
+    (effects.income ?? 0) < 0 || (effects.debt ?? 0) > 0 ||
+    (effects.bills ?? 0) > 0 || (effects.stress ?? 0) > 0
+  return financialSetback ? -1 : 1
+}
