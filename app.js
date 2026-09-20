@@ -2,13 +2,17 @@ const avatarOptions = ['🧒', '👧', '🧑', '👩', '🧑‍🎓', '🧑‍�
 const boardSpaces = ['🏠', '💼', '🧾', '📈', '🎯', '🏁'];
 
 const scenarioTemplates = [
-  { name: 'Apartment starter', income: 42000, bills: 1800, taxes: 7200, debt: 12000, savings: 2600, investments: 1800, cash: 1200, stress: 34 },
-  { name: 'City hustle', income: 52000, bills: 2200, taxes: 9800, debt: 18000, savings: 3200, investments: 2500, cash: 1500, stress: 40 },
-  { name: 'College edge', income: 36000, bills: 1500, taxes: 6100, debt: 22000, savings: 2000, investments: 1200, cash: 900, stress: 38 },
-  { name: 'Family support', income: 47000, bills: 2100, taxes: 8400, debt: 9000, savings: 5000, investments: 3000, cash: 2000, stress: 30 },
-  { name: 'Side hustle start', income: 46000, bills: 1700, taxes: 7600, debt: 16000, savings: 3500, investments: 2800, cash: 1800, stress: 32 },
-  { name: 'Apartment + loan', income: 58000, bills: 2400, taxes: 11300, debt: 25000, savings: 2800, investments: 4200, cash: 1400, stress: 46 }
+  { name: "Student", description: "You’re balancing school and a limited income. Budget for books, food, transportation, and everyday expenses.", income: 1200, bills: 1000, taxes: 0, debt: 200, savings: 400, emergencyFund: 200, investments: 100, cash: 250, stress: 30 },
+  { name: "Business Owner", description: "You’re running a business. Cover operating costs while making enough to support yourself. Income shown is your take-home pay after business costs and taxes; expenses are personal costs.", income: 3000, bills: 2500, taxes: 0, debt: 400, savings: 1500, emergencyFund: 1000, investments: 1000, cash: 700, stress: 60 },
+  { name: "Blue Collar Worker", description: "You work a hands-on job. Balance everyday bills, transportation, work gear, and unexpected expenses.", income: 3600, bills: 3200, taxes: 150, debt: 1500, savings: 50, emergencyFund: 600, investments: 500, cash: 500, stress: 55 },
+  { name: "Employee", description: "You earn a regular paycheck. Balance monthly bills, savings, and your longer-term goals.", income: 3200, bills: 2400, taxes: 0, debt: 60, savings: 500, emergencyFund: 400, investments: 300, cash: 800, stress: 30 },
 ];
+
+const mindsetModifiers = {
+  saver: { emergencyFund: 1.5, cash: 1.2, savings: 1.5, debt: 0.75, investments: 0.8, income: 0.95, bills: 0.9, stress: 0.75 },
+  builder: { emergencyFund: 1.1, cash: 1.1, savings: 1.2, debt: 0.9, investments: 1.4, income: 1.05, bills: 1.0, stress: 1.0 },
+  risk: { emergencyFund: 0.6, cash: 0.8, savings: 0.7, debt: 1.25, investments: 2.0, income: 1.15, bills: 1.1, stress: 1.3 },
+};
 
 const eventTemplates = [
   {
@@ -289,48 +293,24 @@ function formatCurrency(value) {
   }).format(Math.round(value));
 }
 
-function createStarterScenario() {
-  const base = scenarioTemplates[Math.floor(Math.random() * scenarioTemplates.length)];
-  const style = 'saver';
-
-  let income = base.income;
-  let bills = base.bills;
-  let taxes = base.taxes;
-  let debt = base.debt;
-  let savings = base.savings;
-  let investments = base.investments;
-  let cash = base.cash;
-  let stress = base.stress;
-
-  if (style === 'saver') {
-    income *= 0.94;
-    debt *= 0.75;
-    savings += 2800;
-    bills *= 0.92;
-    stress -= 8;
-  } else if (style === 'builder') {
-    income *= 1.08;
-    savings += 900;
-    investments += 1500;
-    debt *= 0.9;
-  } else if (style === 'risk') {
-    income *= 1.14;
-    debt *= 1.2;
-    investments += 2400;
-    stress += 10;
-  }
-
-  return {
+// Use the setup screen's monthly take-home amounts and mindset multipliers.
+// Optional arguments let callers select a story rather than randomizing it.
+function createStarterScenario(situationName, style = 'saver') {
+  const base = scenarioTemplates.find((scenario) => scenario.name === situationName)
+    || scenarioTemplates[Math.floor(Math.random() * scenarioTemplates.length)];
+  const modifiers = mindsetModifiers[style] || mindsetModifiers.saver;
+  const scenario = {
+    ...base,
     label: base.name,
-    income: Math.round(income),
-    bills: Math.round(bills),
-    taxes: Math.round(taxes),
-    debt: Math.round(debt),
-    savings: Math.round(savings),
-    investments: Math.round(investments),
-    cash: Math.round(cash),
-    stress: clamp(stress, 15, 90)
+    incomePeriod: 'monthly',
+    incomeBasis: 'take-home',
+    billsPeriod: 'monthly'
   };
+  Object.keys(modifiers).forEach((key) => {
+    scenario[key] = Math.round(base[key] * modifiers[key]);
+  });
+  scenario.stress = clamp(scenario.stress, 0, 100);
+  return scenario;
 }
 
 function renderStarterStats() {
@@ -338,12 +318,13 @@ function renderStarterStats() {
   state.currentScenario = scenario;
 
   const items = [
-    ['Income', formatCurrency(scenario.income)],
-    ['Bills', formatCurrency(scenario.bills)],
+    ['Take-home income / month', formatCurrency(scenario.income)],
+    ['Expenses / month', formatCurrency(scenario.bills)],
     ['Taxes', formatCurrency(scenario.taxes)],
     ['Debt', formatCurrency(scenario.debt)],
     ['Savings', formatCurrency(scenario.savings)],
-    ['Investments', formatCurrency(scenario.investments)]
+    ['Investments', formatCurrency(scenario.investments)],
+    ['Emergency Fund', formatCurrency(scenario.emergencyFund)]
   ];
 
   elements.starterStats.innerHTML = items
@@ -623,6 +604,7 @@ function startGame() {
     debt: scenario.debt,
     income: scenario.income,
     savings: scenario.savings,
+    emergencyFund: scenario.emergencyFund ?? 0,
     investments: scenario.investments,
     stress: scenario.stress,
     health: 72,
@@ -649,7 +631,7 @@ function startGame() {
 }
 
 function finishGame(outcome = 'complete') {
-  const summary = state.stats.savings + state.stats.investments - state.stats.debt;
+  const summary = state.stats.cash + state.stats.savings + (state.stats.emergencyFund ?? 0) + state.stats.investments - state.stats.debt;
   const finishText = outcome === 'cash-loss'
     ? 'Your cash balance fell below zero, so the run ends here. Protect your cash flow and try again.'
     : outcome === 'income-loss'
