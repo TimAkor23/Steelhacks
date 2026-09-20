@@ -296,10 +296,10 @@ export default function SetupScreen({ onContinue, onBack }: SetupScreenProps) {
           </section>
         </div>
         <footer className="footer">
-          {onBack && <button className="back" type="button" onClick={onBack}>← Back to title</button>}
+          {onBack && <button className="back" type="button" onClick={onBack}>← Back to save slots</button>}
           <div className="continue-wrap">
             <p>Next up: choose a save slot for your character.</p>
-            <button className="continue" type="submit" disabled={!onContinue}>Continue to save slots →</button>
+            <button className="continue" type="submit" disabled={!onContinue}>Continue to game →</button>
             {!onContinue && <p className="hint">Character preview ready. Save-slot navigation is not connected yet.</p>}
           </div>
         </footer>
